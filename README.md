@@ -40,7 +40,7 @@ jobsforce-backend/
 ### Environment Variables
 Copy the example environment file and modify as needed:
 ```bash
-cp .env.example .env
+cp .env.example
 ```
 
 Required environment variables:
