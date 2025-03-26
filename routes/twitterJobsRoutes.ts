@@ -1,7 +1,7 @@
 import express from "express";
 import {
-    getTwitterJobById,
-    getTwitterJobs,
+  getTwitterJobById,
+  getTwitterJobs,
 } from "../controllers/twitterJobsController.js";
 import { authenticate } from "../middlewares/auth.js";
 

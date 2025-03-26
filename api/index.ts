@@ -1,12 +1,12 @@
+import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import type { NextFunction, Request, Response } from "express";
 import connectDB from "../config/db.js";
 import authRoutes from "../routes/authRoutes.js";
-import userRoutes from "../routes/userRoutes.js";
 import twitterJobsRoutes from "../routes/twitterJobsRoutes.js";
+import userRoutes from "../routes/userRoutes.js";
 import { errorHandler } from "../utils/errorHandler.js";
-import cors from "cors";
 
 // Load environment variables
 dotenv.config();
@@ -27,10 +27,13 @@ const app = express();
 // CORS middleware
 app.use(
   cors({
-    origin: function (origin: string | undefined, callback: (error: Error | null, success?: boolean) => void) {
+    origin: (
+      origin: string | undefined,
+      callback: (error: Error | null, success?: boolean) => void,
+    ) => {
       // Allow requests with no origin (like mobile apps or curl requests)
       if (!origin) return callback(null, true);
-      
+
       if (allowedOrigins.indexOf(origin) === -1) {
         const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
         return callback(new Error(msg), false);
@@ -38,7 +41,7 @@ app.use(
       return callback(null, true);
     },
     credentials: true,
-  })
+  }),
 );
 
 // Middleware
