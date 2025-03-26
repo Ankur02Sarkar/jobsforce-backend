@@ -8,7 +8,8 @@
     "start": "bun run api/index.ts"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "@types/jsonwebtoken": "^9.0.9"
   },
   "peerDependencies": {
     "typescript": "^5"
