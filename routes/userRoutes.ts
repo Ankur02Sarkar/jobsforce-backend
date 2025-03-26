@@ -1,12 +1,19 @@
 import express from 'express';
 import type { Response } from 'express';
-import { getUsers, getUserById, updateProfile, deleteUser, updateUser } from '../controllers/userController.js';
+import { getUsers, getUserById, updateProfile, deleteUser, updateUser, handleClerkWebhook } from '../controllers/userController.js';
 import { authenticate, authorizeAdmin } from '../middlewares/auth.js';
 import type { AuthRequest } from '../middlewares/auth.js';
 
 const router = express.Router();
 
-// Apply authentication middleware to all routes
+/**
+ * @route   POST /api/users/webhook
+ * @desc    Webhook endpoint for Clerk events
+ * @access  Public - but secured by Svix signature verification
+ */
+router.post('/webhook', handleClerkWebhook);
+
+// Apply authentication middleware to all routes below this line
 router.use(authenticate as any);
 
 /**
