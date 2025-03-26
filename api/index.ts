@@ -1,15 +1,46 @@
 import express from "express";
-import type { Request, Response } from "express";
+import type { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
+import connectDB from "../config/db.js";
+import authRoutes from "../routes/authRoutes.js";
+import userRoutes from "../routes/userRoutes.js";
+import { errorHandler } from "../utils/errorHandler.js";
 
-dotenv.config(); // Load environment variables from .env file
+// Load environment variables
+dotenv.config();
+
+// Connect to database
+connectDB();
+
 const app = express();
 
+// Middleware
+app.use(express.json()); // Parse JSON request body
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded request body
+
+// Routes
 app.get("/", (req: Request, res: Response) => {
-    res.json({ message: "Express on Vercel" });
+    res.json({ message: "JobsForce API is running" });
 });
 
-const PORT = process.env.PORT || 3000; // Use port from env or default to 3000
+// API routes
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+
+// Error handling middleware
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    errorHandler(err, req, res, next);
+});
+
+// Handle 404 - Route not found
+app.use((req: Request, res: Response) => {
+    res.status(404).json({
+        success: false,
+        message: `Route not found: ${req.originalUrl}`
+    });
+});
+
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server ready on port ${PORT}.`));
 
 export default app;
