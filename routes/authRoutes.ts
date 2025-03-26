@@ -1,6 +1,6 @@
-import express from 'express';
-import { register, login, getMe } from '../controllers/authController.js';
-import { authenticate } from '../middlewares/auth.js';
+import express from "express";
+import { getMe, login, register } from "../controllers/authController.js";
+import { authenticate } from "../middlewares/auth.js";
 
 const router = express.Router();
 
@@ -9,20 +9,20 @@ const router = express.Router();
  * @desc    Register a new user
  * @access  Public
  */
-router.post('/register', register);
+router.post("/register", register);
 
 /**
  * @route   POST /api/auth/login
  * @desc    Authenticate user & get token
  * @access  Public
  */
-router.post('/login', login);
+router.post("/login", login);
 
 /**
  * @route   GET /api/auth/me
  * @desc    Get current user profile
  * @access  Private
  */
-router.get('/me', authenticate as any, getMe);
+router.get("/me", authenticate as any, getMe);
 
-export default router; 
+export default router;

@@ -5,9 +5,13 @@
   "private": true,
   "scripts": {
     "dev": "nodemon api/index.ts",
-    "start": "bun run api/index.ts"
+    "start": "bun run api/index.ts",
+    "lint:fix": "biome check --fix .",
+    "format": "biome format --write .",
+    "check": "biome check --write ."
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "@types/bun": "latest",
     "@types/jsonwebtoken": "^9.0.9"
   },

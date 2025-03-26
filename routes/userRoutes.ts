@@ -1,8 +1,16 @@
-import express from 'express';
-import type { Response } from 'express';
-import { getUsers, getUserById, updateProfile, deleteUser, updateUser, handleClerkWebhook, getUserByClerkId } from '../controllers/userController.js';
-import { authenticate, authorizeAdmin } from '../middlewares/auth.js';
-import type { AuthRequest } from '../middlewares/auth.js';
+import express from "express";
+import type { Response } from "express";
+import {
+  deleteUser,
+  getUserByClerkId,
+  getUserById,
+  getUsers,
+  handleClerkWebhook,
+  updateProfile,
+  updateUser,
+} from "../controllers/userController.js";
+import { authenticate, authorizeAdmin } from "../middlewares/auth.js";
+import type { AuthRequest } from "../middlewares/auth.js";
 
 const router = express.Router();
 
@@ -11,14 +19,14 @@ const router = express.Router();
  * @desc    Webhook endpoint for Clerk events
  * @access  Public - but secured by Svix signature verification
  */
-router.post('/webhook', handleClerkWebhook);
+router.post("/webhook", handleClerkWebhook);
 
 /**
  * @route   GET /api/users/clerk/:clerkId
  * @desc    Get user by Clerk ID with JWT token
  * @access  Public
  */
-router.get('/clerk/:clerkId', getUserByClerkId);
+router.get("/clerk/:clerkId", getUserByClerkId);
 
 // Apply authentication middleware to all routes below this line
 router.use(authenticate as any);
@@ -28,10 +36,10 @@ router.use(authenticate as any);
  * @desc    Get current user profile (same as auth/me but in user routes)
  * @access  Private
  */
-router.get('/profile', (req: AuthRequest, res: Response) => {
+router.get("/profile", (req: AuthRequest, res: Response) => {
   res.json({
     success: true,
-    data: req.user
+    data: req.user,
   });
 });
 
@@ -40,7 +48,7 @@ router.get('/profile', (req: AuthRequest, res: Response) => {
  * @desc    Update current user profile
  * @access  Private
  */
-router.put('/profile', updateProfile);
+router.put("/profile", updateProfile);
 
 // Admin routes - require admin role
 router.use(authorizeAdmin as any);
@@ -50,27 +58,27 @@ router.use(authorizeAdmin as any);
  * @desc    Get all users
  * @access  Private/Admin
  */
-router.get('/', getUsers);
+router.get("/", getUsers);
 
 /**
  * @route   GET /api/users/:id
  * @desc    Get user by ID
  * @access  Private/Admin
  */
-router.get('/:id', getUserById);
+router.get("/:id", getUserById);
 
 /**
  * @route   PUT /api/users/:id
  * @desc    Update user by ID
  * @access  Private/Admin
  */
-router.put('/:id', updateUser);
+router.put("/:id", updateUser);
 
 /**
  * @route   DELETE /api/users/:id
  * @desc    Delete user
  * @access  Private/Admin
  */
-router.delete('/:id', deleteUser);
+router.delete("/:id", deleteUser);
 
-export default router; 
+export default router;
