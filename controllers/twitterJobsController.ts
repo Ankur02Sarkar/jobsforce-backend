@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import { ApiError, asyncHandler } from "../utils/errorHandler.js";
+import type { AuthRequest } from "../middlewares/auth.js";
 
 // Define response types for better type safety
 interface ApiResponse<T> {
@@ -113,10 +114,10 @@ async function fetchTwitterJobs(
 /**
  * @desc    Fetch Twitter jobs based on search criteria
  * @route   POST /api/xjobs
- * @access  Public
+ * @access  Private
  */
 export const getTwitterJobs = asyncHandler(
-    async (req: Request, res: Response) => {
+    async (req: AuthRequest, res: Response) => {
         // Extract necessary variables from the request body
         const {
             count,
@@ -243,10 +244,10 @@ async function fetchTwitterJobById(jobId: string, loggedIn: boolean) {
 /**
  * @desc    Fetch Twitter job details by job ID
  * @route   POST /api/xjobs/details
- * @access  Public
+ * @access  Private
  */
 export const getTwitterJobById = asyncHandler(
-    async (req: Request, res: Response) => {
+    async (req: AuthRequest, res: Response) => {
         // Extract jobId and loggedIn status from request body
         const { jobId, loggedIn } = req.body;
 
