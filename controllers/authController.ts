@@ -11,7 +11,7 @@ import { asyncHandler, ApiError, ValidationError } from '../utils/errorHandler.j
  */
 const generateToken = (id: string): string => {
   return jwt.sign({ id }, process.env.JWT_SECRET as string, {
-    expiresIn: '30d'
+    expiresIn: '7d'
   });
 };
 
