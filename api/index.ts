@@ -4,6 +4,7 @@ import type { NextFunction, Request, Response } from "express";
 import connectDB from "../config/db.js";
 import authRoutes from "../routes/authRoutes.js";
 import userRoutes from "../routes/userRoutes.js";
+import twitterJobsRoutes from "../routes/twitterJobsRoutes.js";
 import { errorHandler } from "../utils/errorHandler.js";
 import cors from "cors";
 
@@ -52,6 +53,7 @@ app.get("/", (req: Request, res: Response) => {
 // API routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/xjobs", twitterJobsRoutes);
 
 // Error handling middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
