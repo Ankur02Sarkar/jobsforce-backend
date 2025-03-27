@@ -7,6 +7,7 @@ import authRoutes from "../routes/authRoutes.js";
 import twitterJobsRoutes from "../routes/twitterJobsRoutes.js";
 import userRoutes from "../routes/userRoutes.js";
 import codeCompilerRoutes from "../routes/codeCompilerRoutes.js";
+import interviewRoutes from "../routes/interviewRoutes.js";
 import { errorHandler } from "../utils/errorHandler.js";
 
 // Load environment variables
@@ -59,6 +60,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/xjobs", twitterJobsRoutes);
 app.use("/api/compiler", codeCompilerRoutes);
+app.use("/api/interviews", interviewRoutes);
 
 // Error handling middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
