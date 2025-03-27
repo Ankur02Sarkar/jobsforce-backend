@@ -11,7 +11,7 @@ export interface IInterview extends Document {
   userId: Types.ObjectId;
   title: string;
   date: Date;
-  status: "completed" | "pending" | "scheduled";
+  status: "completed" | "pending" | "scheduled" | "cancelled";
   duration: number;
   questions: IQuestion[];
   feedback: string;
