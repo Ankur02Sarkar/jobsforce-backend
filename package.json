@@ -14,7 +14,8 @@
     "@biomejs/biome": "1.9.4",
     "@types/bun": "latest",
     "@types/cors": "^2.8.17",
-    "@types/jsonwebtoken": "^9.0.9"
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/node-fetch": "^2.6.12"
   },
   "peerDependencies": {
     "typescript": "^5"
@@ -28,6 +29,7 @@
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.13.0",
+    "node-fetch": "^2.7.0",
     "nodemon": "^3.1.9",
     "svix": "^1.62.0",
     "ts-node": "^10.9.2"

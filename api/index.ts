@@ -6,6 +6,7 @@ import connectDB from "../config/db.js";
 import authRoutes from "../routes/authRoutes.js";
 import twitterJobsRoutes from "../routes/twitterJobsRoutes.js";
 import userRoutes from "../routes/userRoutes.js";
+import codeCompilerRoutes from "../routes/codeCompilerRoutes.js";
 import { errorHandler } from "../utils/errorHandler.js";
 
 // Load environment variables
@@ -57,6 +58,7 @@ app.get("/", (req: Request, res: Response) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/xjobs", twitterJobsRoutes);
+app.use("/api/compiler", codeCompilerRoutes);
 
 // Error handling middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
