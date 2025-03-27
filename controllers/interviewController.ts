@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { Types } from "mongoose";
-import Interview, { type IInterview } from "../models/Interview.js";
+import Interview, { type IInterview, type IQuestion } from "../models/Interview.js";
 import { 
   ApiError, 
   ValidationError, 
@@ -122,7 +122,19 @@ export const getInterviewById = asyncHandler(async (req: AuthRequest, res: Respo
  */
 export const updateInterview = asyncHandler(async (req: AuthRequest, res: Response) => {
   const { id } = req.params;
-  const { title, date, status, duration, questions, feedback } = req.body;
+  const { 
+    title, 
+    date, 
+    status, 
+    duration, 
+    questions, 
+    feedback, 
+    questionId, 
+    question, 
+    answer, 
+    score, 
+    timeTaken 
+  } = req.body;
 
   // Validate ObjectId
   if (!id || !Types.ObjectId.isValid(id)) {
@@ -151,19 +163,48 @@ export const updateInterview = asyncHandler(async (req: AuthRequest, res: Respon
     );
   }
 
+  let updateData: any = {
+    ...(title && { title }),
+    ...(date && { date }),
+    ...(status && { status }),
+    ...(duration && { duration }),
+    ...(feedback !== undefined && { feedback }),
+  };
+
+  // Handle updating a single question if question fields are provided
+  if (questionId !== undefined) {
+    const currentQuestions = [...interview.questions];
+    const index = currentQuestions.findIndex(q => 
+      q.questionId === questionId
+    );
+
+    if (index >= 0) {
+      // Update existing question
+      if (question !== undefined) currentQuestions[index]!.question = question;
+      if (answer !== undefined) currentQuestions[index]!.answer = answer;
+      if (score !== undefined) currentQuestions[index]!.score = score;
+      if (timeTaken !== undefined) currentQuestions[index]!.timeTaken = timeTaken;
+    } else {
+      // Add new question
+      currentQuestions.push({
+        question: question || "Untitled Question",
+        answer: answer || "",
+        score: score || 0,
+        questionId: questionId,
+        ...(timeTaken !== undefined && { timeTaken }),
+      });
+    }
+    
+    updateData.questions = currentQuestions;
+  } else if (questions) {
+    // If replacing the entire questions array
+    updateData.questions = questions;
+  }
+
   // Update interview
   const updatedInterview = await Interview.findByIdAndUpdate(
     id,
-    {
-      $set: {
-        ...(title && { title }),
-        ...(date && { date }),
-        ...(status && { status }),
-        ...(duration && { duration }),
-        ...(feedback !== undefined && { feedback }),
-      },
-      ...(questions && { $set: { questions } }),
-    },
+    { $set: updateData },
     { new: true, runValidators: true }
   );
 

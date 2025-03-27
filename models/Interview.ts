@@ -4,6 +4,8 @@ export interface IQuestion {
   question: string;
   answer: string;
   score: number;
+  questionId?: number;
+  timeTaken?: number;
 }
 
 export interface IInterview extends Document {
@@ -33,6 +35,13 @@ const questionSchema = new Schema<IQuestion>({
     min: 0,
     max: 10,
     default: 0,
+  },
+  questionId: {
+    type: Number,
+  },
+  timeTaken: {
+    type: Number,
+    min: 0,
   },
 });
 
