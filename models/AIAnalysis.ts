@@ -97,7 +97,7 @@ const aiAnalysisSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 // Create compound index for efficient lookups

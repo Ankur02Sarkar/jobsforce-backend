@@ -22,7 +22,14 @@ const asyncHandler = (fn: Function) => (req: Request, res: Response) => {
  */
 export const analyzeSolution = asyncHandler(
   async (req: AuthRequest, res: Response) => {
-    const { code, language, problemStatement, problemId, interviewId, questionId } = req.body;
+    const {
+      code,
+      language,
+      problemStatement,
+      problemId,
+      interviewId,
+      questionId,
+    } = req.body;
 
     if (!code || !language) {
       return res.status(400).json({
@@ -41,7 +48,7 @@ export const analyzeSolution = asyncHandler(
 
       // Check if we already have analysis for this code and question
       let existingAnalysis = null;
-      
+
       if (interviewId && questionId) {
         existingAnalysis = await AIAnalysis.findOne({
           userId: req.user._id,
@@ -62,7 +69,7 @@ export const analyzeSolution = asyncHandler(
         return res.status(200).json({
           success: true,
           message: "Cached code analysis retrieved",
-          data: { 
+          data: {
             analysisText: existingAnalysis.analysisText,
             algorithmAnalysis: existingAnalysis.algorithmAnalysis,
             fromCache: true,
@@ -71,15 +78,19 @@ export const analyzeSolution = asyncHandler(
       }
 
       // Otherwise, get new analysis from API
-      const analysisResult = await openAIService.analyzeCode(code, language, problemStatement);
-      
+      const analysisResult = await openAIService.analyzeCode(
+        code,
+        language,
+        problemStatement,
+      );
+
       // No need to parse manually - the service now returns structured data directly
       const { algorithmAnalysis, analysisText } = analysisResult;
 
       // Save to database
       if (existingAnalysis) {
-        existingAnalysis.set('algorithmAnalysis', algorithmAnalysis);
-        existingAnalysis.set('analysisText', analysisText);
+        existingAnalysis.set("algorithmAnalysis", algorithmAnalysis);
+        existingAnalysis.set("analysisText", analysisText);
         await existingAnalysis.save();
       } else {
         const analysis = new AIAnalysis({
@@ -95,11 +106,11 @@ export const analyzeSolution = asyncHandler(
 
         await analysis.save();
       }
-      
+
       return res.status(200).json({
         success: true,
         message: "Code analysis completed",
-        data: { 
+        data: {
           analysisText,
           algorithmAnalysis,
           fromCache: false,
@@ -122,7 +133,8 @@ export const analyzeSolution = asyncHandler(
  */
 export const complexityAnalysis = asyncHandler(
   async (req: AuthRequest, res: Response) => {
-    const { code, language, problemType, problemId, interviewId, questionId } = req.body;
+    const { code, language, problemType, problemId, interviewId, questionId } =
+      req.body;
 
     if (!code || !language) {
       return res.status(400).json({
@@ -141,7 +153,7 @@ export const complexityAnalysis = asyncHandler(
 
       // Check if we already have analysis for this code and question
       let existingAnalysis = null;
-      
+
       if (interviewId && questionId) {
         existingAnalysis = await AIAnalysis.findOne({
           userId: req.user._id,
@@ -162,7 +174,7 @@ export const complexityAnalysis = asyncHandler(
         return res.status(200).json({
           success: true,
           message: "Cached complexity analysis retrieved",
-          data: { 
+          data: {
             analysisText: existingAnalysis.analysisText,
             complexityAnalysis: existingAnalysis.complexityAnalysis,
             fromCache: true,
@@ -171,15 +183,19 @@ export const complexityAnalysis = asyncHandler(
       }
 
       // Otherwise, get new analysis from API
-      const complexityResult = await openAIService.analyzeComplexity(code, language, problemType);
-      
+      const complexityResult = await openAIService.analyzeComplexity(
+        code,
+        language,
+        problemType,
+      );
+
       // No need to parse manually - the service now returns structured data directly
       const { complexityAnalysis, analysisText } = complexityResult;
 
       // Save to database
       if (existingAnalysis) {
-        existingAnalysis.set('complexityAnalysis', complexityAnalysis);
-        existingAnalysis.set('analysisText', analysisText);
+        existingAnalysis.set("complexityAnalysis", complexityAnalysis);
+        existingAnalysis.set("analysisText", analysisText);
         await existingAnalysis.save();
       } else {
         const analysis = new AIAnalysis({
@@ -194,11 +210,11 @@ export const complexityAnalysis = asyncHandler(
         });
         await analysis.save();
       }
-      
+
       return res.status(200).json({
         success: true,
         message: "Complexity analysis completed",
-        data: { 
+        data: {
           analysisText,
           complexityAnalysis,
           fromCache: false,
@@ -221,7 +237,15 @@ export const complexityAnalysis = asyncHandler(
  */
 export const optimizeSolution = asyncHandler(
   async (req: AuthRequest, res: Response) => {
-    const { code, language, problemStatement, optimizationFocus, problemId, interviewId, questionId } = req.body;
+    const {
+      code,
+      language,
+      problemStatement,
+      optimizationFocus,
+      problemId,
+      interviewId,
+      questionId,
+    } = req.body;
 
     if (!code || !language || !problemStatement) {
       return res.status(400).json({
@@ -230,7 +254,7 @@ export const optimizeSolution = asyncHandler(
       });
     }
 
-    if (!optimizationFocus || !['time', 'space'].includes(optimizationFocus)) {
+    if (!optimizationFocus || !["time", "space"].includes(optimizationFocus)) {
       return res.status(400).json({
         success: false,
         message: "Valid optimization focus (time or space) is required",
@@ -247,7 +271,7 @@ export const optimizeSolution = asyncHandler(
 
       // Check if we already have analysis for this code and question
       let existingAnalysis = null;
-      
+
       if (interviewId && questionId) {
         existingAnalysis = await AIAnalysis.findOne({
           userId: req.user._id,
@@ -268,7 +292,7 @@ export const optimizeSolution = asyncHandler(
         return res.status(200).json({
           success: true,
           message: "Cached optimization suggestions retrieved",
-          data: { 
+          data: {
             optimizationText: existingAnalysis.analysisText,
             optimizationSuggestions: existingAnalysis.optimizationSuggestions,
             fromCache: true,
@@ -281,16 +305,19 @@ export const optimizeSolution = asyncHandler(
         code,
         language,
         problemStatement,
-        optimizationFocus as 'time' | 'space'
+        optimizationFocus as "time" | "space",
       );
-      
+
       // No need to parse manually - the service now returns structured data directly
       const { optimizationSuggestions, analysisText } = optimizationResult;
 
       // Save to database
       if (existingAnalysis) {
-        existingAnalysis.set('optimizationSuggestions', optimizationSuggestions);
-        existingAnalysis.set('analysisText', analysisText);
+        existingAnalysis.set(
+          "optimizationSuggestions",
+          optimizationSuggestions,
+        );
+        existingAnalysis.set("analysisText", analysisText);
         await existingAnalysis.save();
       } else {
         const analysis = new AIAnalysis({
@@ -305,11 +332,11 @@ export const optimizeSolution = asyncHandler(
         });
         await analysis.save();
       }
-      
+
       return res.status(200).json({
         success: true,
         message: "Solution optimization completed",
-        data: { 
+        data: {
           optimizationText: analysisText,
           optimizationSuggestions,
           fromCache: false,
@@ -332,7 +359,14 @@ export const optimizeSolution = asyncHandler(
  */
 export const generateTestCases = asyncHandler(
   async (req: AuthRequest, res: Response) => {
-    const { problemStatement, constraints, solutionHint, problemId, interviewId, questionId } = req.body;
+    const {
+      problemStatement,
+      constraints,
+      solutionHint,
+      problemId,
+      interviewId,
+      questionId,
+    } = req.body;
 
     if (!problemStatement || !constraints) {
       return res.status(400).json({
@@ -352,7 +386,7 @@ export const generateTestCases = asyncHandler(
       // Check if we already have analysis for this question
       let existingAnalysis = null;
       let query = {};
-      
+
       if (interviewId && questionId) {
         query = {
           userId: req.user._id,
@@ -370,15 +404,19 @@ export const generateTestCases = asyncHandler(
           message: "Either interviewId + questionId or problemId is required",
         });
       }
-      
+
       existingAnalysis = await AIAnalysis.findOne(query);
 
       // If we have cached results, return them
-      if (existingAnalysis && existingAnalysis.testCases && existingAnalysis.testCases.length > 0) {
+      if (
+        existingAnalysis &&
+        existingAnalysis.testCases &&
+        existingAnalysis.testCases.length > 0
+      ) {
         return res.status(200).json({
           success: true,
           message: "Cached test cases retrieved",
-          data: { 
+          data: {
             testCasesText: existingAnalysis.analysisText,
             testCases: existingAnalysis.testCases,
             fromCache: true,
@@ -390,16 +428,16 @@ export const generateTestCases = asyncHandler(
       const testCaseResult = await openAIService.generateTestCases(
         problemStatement,
         constraints,
-        solutionHint
+        solutionHint,
       );
-      
+
       // No need to parse manually - the service now returns structured data directly
       const { testCases, analysisText } = testCaseResult;
 
       // Save to database
       if (existingAnalysis) {
-        existingAnalysis.set('testCases', testCases);
-        existingAnalysis.set('analysisText', analysisText);
+        existingAnalysis.set("testCases", testCases);
+        existingAnalysis.set("analysisText", analysisText);
         await existingAnalysis.save();
       } else {
         const analysis = new AIAnalysis({
@@ -413,11 +451,11 @@ export const generateTestCases = asyncHandler(
         });
         await analysis.save();
       }
-      
+
       return res.status(200).json({
         success: true,
         message: "Test case generation completed",
-        data: { 
+        data: {
           testCasesText: analysisText,
           testCases,
           fromCache: false,
