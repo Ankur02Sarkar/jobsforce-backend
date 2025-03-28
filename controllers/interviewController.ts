@@ -264,3 +264,43 @@ export const deleteInterview = asyncHandler(
     });
   },
 );
+
+/**
+ * @desc    Get or create an interview by job ID
+ * @route   GET /api/interviews/job/:jobId
+ * @access  Private
+ */
+export const getOrCreateInterviewByJobId = asyncHandler(
+  async (req: AuthRequest, res: Response) => {
+    const { jobId } = req.params;
+
+    if (!jobId) {
+      throw new ApiError(`Invalid job ID`, 400);
+    }
+
+    // Try to find an existing interview that was created from this job
+    let interview = await Interview.findOne({ 
+      userId: req.user._id,
+      jobId: jobId 
+    });
+
+    // If no interview exists, create one
+    if (!interview) {
+      interview = await Interview.create({
+        userId: req.user._id,
+        title: `Job Interview - ${new Date().toLocaleDateString()}`,
+        date: new Date().toISOString(),
+        status: "pending",
+        duration: 60,
+        questions: [],
+        feedback: "",
+        jobId: jobId
+      });
+    }
+
+    res.json({
+      success: true,
+      data: interview,
+    });
+  },
+);

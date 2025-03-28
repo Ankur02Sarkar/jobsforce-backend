@@ -5,6 +5,7 @@ import {
   getInterviewById,
   getInterviews,
   updateInterview,
+  getOrCreateInterviewByJobId,
 } from "../controllers/interviewController.js";
 import { authenticate } from "../middlewares/auth.js";
 
@@ -26,6 +27,13 @@ router.get("/", authenticate as any, getInterviews);
  * @access  Private
  */
 router.post("/", authenticate as any, createInterview);
+
+/**
+ * @route   GET /api/interviews/job/:jobId
+ * @desc    Get or create an interview for a specific job ID
+ * @access  Private
+ */
+router.get("/job/:jobId", authenticate as any, getOrCreateInterviewByJobId);
 
 /**
  * @route   GET /api/interviews/:id

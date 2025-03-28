@@ -17,6 +17,7 @@ export interface IInterview extends Document {
   duration: number;
   questions: IQuestion[];
   feedback: string;
+  jobId?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -75,6 +76,10 @@ const interviewSchema = new Schema<IInterview>(
     feedback: {
       type: String,
       default: "",
+    },
+    jobId: {
+      type: String,
+      index: true, // Add index for faster lookups
     },
   },
   { timestamps: true },
