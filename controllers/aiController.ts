@@ -407,7 +407,6 @@ export const generateTestCases = asyncHandler(
           interviewId: interviewId || null,
           questionId: questionId || null,
           problemId: problemId || null,
-          code: "",  // No code for test case generation
           language: "none",
           analysisText,
           testCases,

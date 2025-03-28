@@ -81,11 +81,13 @@ const aiAnalysisSchema = new mongoose.Schema(
     },
     code: {
       type: String,
-      required: true,
+      required: false,
+      default: "",
     },
     language: {
       type: String,
-      required: true,
+      required: false,
+      default: "none",
     },
     analysisText: String,
     algorithmAnalysis: algorithmAnalysisSchema,
