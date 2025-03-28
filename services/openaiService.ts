@@ -1,9 +1,19 @@
 import OpenAI from "openai";
+import dotenv from "dotenv";
+
+// Ensure environment variables are loaded
+dotenv.config();
+
+// Verify API key is available
+const apiKey = process.env.OPENAI_API_KEY;
+if (!apiKey) {
+  console.error("OPENAI_API_KEY is missing in environment variables!");
+}
 
 // Initialize OpenAI client with OpenRouter configuration
 const openai = new OpenAI({
   baseURL: "https://openrouter.ai/api/v1",
-  apiKey: "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",
+  apiKey: apiKey,
   defaultHeaders: {
     "HTTP-Referer": process.env.FRONTEND_URL || "https://jobs-force.vercel.app", 
     "X-Title": "JobsForce Code Analysis",

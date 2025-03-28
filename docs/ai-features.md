@@ -4,9 +4,7 @@ This document outlines the AI-powered features implemented in the platform to as
 
 ## Overview
 
-The platform integrates with OpenRouter's API to provide intelligent assistance for code analysis, optimization, and test case generation. These features are designed to help users improve their algorithmic problem-solving skills, understand time and space complexity trade-offs, and learn optimization techniques.
-
-OpenRouter provides access to various AI models including Claude, Gemini, and others through a unified API.
+The platform integrates with OpenAI's API to provide intelligent assistance for code analysis, optimization, and test case generation. These features are designed to help users improve their algorithmic problem-solving skills, understand time and space complexity trade-offs, and learn optimization techniques.
 
 ## Features
 
@@ -30,6 +28,16 @@ Analyzes code to identify the algorithm used, approach efficiency, and potential
   "problemId": "60a1b2c3d4e5f6a7b8c9d0e1", // Optional
   "interviewId": "60a1b2c3d4e5f6a7b8c9d0e2", // Optional
   "questionId": 123 // Optional
+}
+```
+
+**Sample Postman Payload:**
+```json
+{
+  "code": "function maxSubarray(nums) {\n  let maxSum = nums[0];\n  let currentSum = nums[0];\n  \n  for (let i = 1; i < nums.length; i++) {\n    currentSum = Math.max(nums[i], currentSum + nums[i]);\n    maxSum = Math.max(maxSum, currentSum);\n  }\n  \n  return maxSum;\n}",
+  "language": "javascript",
+  "problemStatement": "Given an array of integers, find the maximum sum of any contiguous subarray.",
+  "problemId": "60d21b4667d0d8992e610c85" 
 }
 ```
 
@@ -77,6 +85,16 @@ Calculates and explains the time and space complexity of a solution, including:
   "problemId": "60a1b2c3d4e5f6a7b8c9d0e1", // Optional
   "interviewId": "60a1b2c3d4e5f6a7b8c9d0e2", // Optional
   "questionId": 123 // Optional
+}
+```
+
+**Sample Postman Payload:**
+```json
+{
+  "code": "function maxSubarray(nums) {\n  let maxSum = nums[0];\n  let currentSum = nums[0];\n  \n  for (let i = 1; i < nums.length; i++) {\n    currentSum = Math.max(nums[i], currentSum + nums[i]);\n    maxSum = Math.max(maxSum, currentSum);\n  }\n  \n  return maxSum;\n}",
+  "language": "javascript",
+  "problemType": "array",
+  "problemId": "60d21b4667d0d8992e610c85"
 }
 ```
 
@@ -131,6 +149,17 @@ Suggests optimized versions of the code focusing on either time or space efficie
 }
 ```
 
+**Sample Postman Payload:**
+```json
+{
+  "code": "function maxSubarray(nums) {\n  let maxSum = -Infinity;\n  \n  for (let i = 0; i < nums.length; i++) {\n    let sum = 0;\n    for (let j = i; j < nums.length; j++) {\n      sum += nums[j];\n      maxSum = Math.max(maxSum, sum);\n    }\n  }\n  \n  return maxSum;\n}",
+  "language": "javascript",
+  "problemStatement": "Given an array of integers, find the maximum sum of any contiguous subarray.",
+  "optimizationFocus": "time",
+  "problemId": "60d21b4667d0d8992e610c85"
+}
+```
+
 **Response:**
 ```json
 {
@@ -179,6 +208,27 @@ Generates comprehensive test cases, including edge cases and performance tests:
 }
 ```
 
+**Sample Postman Payload:**
+```json
+{
+  "problemStatement": "Given an array of integers, find the maximum sum of any contiguous subarray.",
+  "constraints": "The array may contain both positive and negative integers. Array length is between 1 and 10^5. Values range from -10^4 to 10^4.",
+  "solutionHint": "Consider using Kadane's algorithm for an O(n) solution.",
+  "problemId": "60d21b4667d0d8992e610c85"
+}
+```
+
+**Alternative for interview context:**
+```json
+{
+  "problemStatement": "Given an array of integers, find the maximum sum of any contiguous subarray.",
+  "constraints": "The array may contain both positive and negative integers. Array length is between 1 and 10^5. Values range from -10^4 to 10^4.",
+  "solutionHint": "Consider using Kadane's algorithm for an O(n) solution.",
+  "interviewId": "60d21b4667d0d8992e610c85", 
+  "questionId": 1
+}
+```
+
 **Response:**
 ```json
 {
@@ -207,6 +257,8 @@ Generates comprehensive test cases, including edge cases and performance tests:
 }
 ```
 
+**Note**: When testing in Postman, replace the `problemId` and `interviewId` values with actual MongoDB ObjectIds from your database. For testing, you can use any valid ObjectId format (24 hexadecimal characters). Also, make sure to include the authentication token in your requests.
+
 ## Caching Mechanism
 
 All AI analysis results are cached in the database to improve performance and reduce API calls. The caching works as follows:
@@ -217,7 +269,7 @@ All AI analysis results are cached in the database to improve performance and re
 
 2. If a cached result exists, it's returned immediately with a `fromCache: true` flag in the response
 
-3. If no cached result exists, the system makes an API call to OpenRouter, processes the response, saves it to the database, and returns it with `fromCache: false`
+3. If no cached result exists, the system makes an API call to OpenAI, processes the response, saves it to the database, and returns it with `fromCache: false`
 
 This caching mechanism significantly improves response times for repeated requests and reduces API usage costs.
 
@@ -225,7 +277,7 @@ This caching mechanism significantly improves response times for repeated reques
 
 The AI features are implemented using:
 
-1. **OpenRouter API**: Utilizes multiple AI models (Gemini) for different types of analysis
+1. **OpenAI API**: Utilizes multiple AI models (Gemini) for different types of analysis
 2. **Database Integration**: Stores analysis results for future reference and caching
 3. **JWT Authentication**: All AI endpoints are protected and require authentication
 
@@ -234,7 +286,7 @@ The AI features are implemented using:
 The following environment variables are required:
 
 ```
-OPENROUTER_API_KEY=your_openrouter_api_key
+OPENAI_API_KEY=your_openai_api_key
 SITE_URL=your_website_url
 ```
 
