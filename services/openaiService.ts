@@ -1,12 +1,17 @@
 import OpenAI from "openai";
 
-// Initialize OpenAI client
+// Initialize OpenAI client with OpenRouter configuration
 const openai = new OpenAI({
+  baseURL: "https://openrouter.ai/api/v1",
   apiKey: process.env.OPENAI_API_KEY,
+  defaultHeaders: {
+    "HTTP-Referer": process.env.FRONTEND_URL || "https://jobs-force.vercel.app", 
+    "X-Title": "JobsForce Code Analysis",
+  },
 });
 
 /**
- * Service for interacting with OpenAI API
+ * Service for interacting with OpenAI-compatible APIs through OpenRouter
  */
 export class OpenAIService {
   /**
@@ -32,7 +37,7 @@ export class OpenAIService {
     `;
 
     const response = await openai.chat.completions.create({
-      model: "gpt-4o",
+      model: "anthropic/claude-3-haiku:free",
       messages: [
         {
           role: "system",
@@ -70,7 +75,7 @@ export class OpenAIService {
     `;
 
     const response = await openai.chat.completions.create({
-      model: "gpt-4o",
+      model: "anthropic/claude-3-haiku:free",
       messages: [
         {
           role: "system",
@@ -112,7 +117,7 @@ export class OpenAIService {
     `;
 
     const response = await openai.chat.completions.create({
-      model: "gpt-4o",
+      model: "google/gemini-2.0-flash-lite-preview-02-05:free",
       messages: [
         {
           role: "system",
@@ -153,7 +158,7 @@ export class OpenAIService {
     `;
 
     const response = await openai.chat.completions.create({
-      model: "gpt-4o",
+      model: "anthropic/claude-3-haiku:free",
       messages: [
         {
           role: "system",
