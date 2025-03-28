@@ -48,4 +48,4 @@ router.put("/:id", authenticate as any, updateInterview);
  */
 router.delete("/:id", authenticate as any, deleteInterview);
 
-export default router; 
+export default router;

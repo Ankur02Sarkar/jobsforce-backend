@@ -1,5 +1,8 @@
 import express from "express";
-import { submitCode, getCodeResult } from "../controllers/codeCompilerController.js";
+import {
+  getCodeResult,
+  submitCode,
+} from "../controllers/codeCompilerController.js";
 
 const router = express.Router();
 
@@ -9,4 +12,4 @@ router.post("/submit", submitCode);
 // Get code execution results
 router.get("/result/:submissionId", getCodeResult);
 
-export default router; 
+export default router;

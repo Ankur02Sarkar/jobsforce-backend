@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document, Types } from "mongoose";
+import mongoose, { Schema, type Document, type Types } from "mongoose";
 
 export interface IQuestion {
   question: string;
@@ -77,8 +77,8 @@ const interviewSchema = new Schema<IInterview>(
       default: "",
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const Interview = mongoose.model<IInterview>("Interview", interviewSchema);
-export default Interview; 
+export default Interview;

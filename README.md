@@ -13,15 +13,24 @@ jobsforce-backend/
 ├── controllers/
 │   ├── authController.ts     # Authentication logic
 │   ├── userController.ts     # User management logic
-│   └── twitterJobsController.ts # Twitter job scraping logic
+│   ├── twitterJobsController.ts # Twitter job scraping logic
+│   ├── codeCompilerController.ts # Code compilation and execution 
+│   └── aiController.ts       # AI-powered code analysis
 ├── middlewares/
 │   └── auth.ts               # Authentication middleware
 ├── models/
-│   └── User.ts               # User data model
+│   ├── User.ts               # User data model
+│   └── AIAnalysis.ts         # AI analysis data model
 ├── routes/
 │   ├── authRoutes.ts         # Authentication routes
 │   ├── userRoutes.ts         # User management routes
-│   └── twitterJobsRoutes.ts  # Twitter job routes
+│   ├── twitterJobsRoutes.ts  # Twitter job routes
+│   ├── codeCompilerRoutes.ts # Code compiler routes
+│   └── aiRoutes.ts           # AI analysis routes
+├── services/
+│   └── openaiService.ts      # OpenAI integration service
+├── docs/
+│   └── ai-features.md        # AI features documentation
 ├── utils/
 │   └── errorHandler.js       # Error handling utilities
 ├── .env.example              # Example environment variables
@@ -36,6 +45,7 @@ jobsforce-backend/
 - Node.js 18.x or later
 - Bun runtime
 - MongoDB
+- OpenAI API key (for AI features)
 
 ### Environment Variables
 Copy the example environment file and modify as needed:
@@ -48,6 +58,10 @@ Required environment variables:
 - `JWT_SECRET`: Secret for JWT token generation
 - `PORT`: Port for the server (default: 3000)
 - `CLERK_WEBHOOK_SECRET`: Clerk Webhhok Secret
+- `OPENAI_API_KEY`: OpenAI API key for AI features
+- `SPHERE_ENGINE_TOKEN`: Sphere Engine token for code compilation
+- `SPHERE_ENGINE_SUBMIT_URL`: Sphere Engine submission URL
+- `SPHERE_ENGINE_STATUS_URL`: Sphere Engine status check URL
 
 ### Installation
 
@@ -69,6 +83,8 @@ The API follows RESTful principles with resource-based routing. Core endpoints i
 - Auth: `/api/auth/*` - User registration, login, and token management
 - Users: `/api/users/*` - User profile management
 - Twitter Jobs: `/api/xjobs/*` - Job scraping from Twitter
+- Code Compiler: `/api/compiler/*` - Code compilation and execution
+- AI Features: `/api/ai/*` - AI-powered code analysis and optimization
 
 ### Security
 - JWT-based authentication with refresh tokens
@@ -87,6 +103,16 @@ The API follows RESTful principles with resource-based routing. Core endpoints i
 - TypeScript for static type checking
 - Biome for code linting and formatting
 - Modular architecture for maintainability and reusability
+
+### AI Features
+The platform includes several AI-powered features to assist with competitive programming:
+
+1. **Algorithm Analysis**: Analyze code to identify algorithms and suggest improvements
+2. **Complexity Analysis**: Calculate time and space complexity of solutions
+3. **Code Optimization**: Suggest optimized versions focusing on time or space efficiency
+4. **Test Case Generation**: Generate comprehensive test cases, including edge cases
+
+For detailed documentation on AI features, see [AI Features Documentation](docs/ai-features.md).
 
 ## Development Workflow
 
