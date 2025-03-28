@@ -34,4 +34,13 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: '⚠️ **Security Alert**: Potential secrets or API keys were detected in this PR. Please review the security scan results and remove any exposed credentials. Remember to use environment variables for sensitive information.'
-            }) 
+            })
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci || npm install 
