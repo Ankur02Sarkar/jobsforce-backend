@@ -37,7 +37,7 @@ export class OpenAIService {
     `;
 
     const response = await openai.chat.completions.create({
-      model: "anthropic/claude-3-haiku:free",
+      model: "google/gemini-2.0-flash-lite-preview-02-05:free",
       messages: [
         {
           role: "system",
@@ -75,7 +75,7 @@ export class OpenAIService {
     `;
 
     const response = await openai.chat.completions.create({
-      model: "anthropic/claude-3-haiku:free",
+      model: "google/gemini-2.0-flash-lite-preview-02-05:free",
       messages: [
         {
           role: "system",
@@ -158,7 +158,7 @@ export class OpenAIService {
     `;
 
     const response = await openai.chat.completions.create({
-      model: "anthropic/claude-3-haiku:free",
+      model: "google/gemini-2.0-flash-lite-preview-02-05:free",
       messages: [
         {
           role: "system",
