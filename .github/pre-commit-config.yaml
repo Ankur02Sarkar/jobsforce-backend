@@ -1,0 +1,37 @@
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.4.0
+  hooks:
+    - id: trailing-whitespace
+    - id: end-of-file-fixer
+    - id: check-yaml
+    - id: check-json
+    - id: check-added-large-files
+    - id: check-merge-conflict
+    - id: detect-private-key
+
+- repo: https://github.com/zricethezav/gitleaks
+  rev: v8.16.0
+  hooks:
+    - id: gitleaks-docker
+      args: ["--config", ".github/gitleaks.toml"]
+
+- repo: local
+  hooks:
+    - id: biome-format
+      name: Biome Format
+      entry: npm run format
+      language: system
+      pass_filenames: false
+      
+    - id: biome-lint
+      name: Biome Lint
+      entry: npm run check
+      language: system
+      pass_filenames: false
+      
+    - id: npm-audit
+      name: NPM Audit
+      entry: npm audit --audit-level=high
+      language: system
+      pass_filenames: false 

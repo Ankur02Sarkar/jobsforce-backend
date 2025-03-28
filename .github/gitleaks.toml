@@ -1,0 +1,50 @@
+# Title for specific rule set
+title = "JobsForce Backend Security Rules"
+
+# Define custom regexes for the project
+[[rules]]
+id = "generic-api-key"
+description = "Generic API Key"
+regex = '''(?i)([a-zA-Z0-9_-]*(?:key|token|secret|password|credential)[a-zA-Z0-9_-]*[ ]*[=:,])[ ]*("|')?[a-zA-Z0-9_\-\.=]{20,}("|')?'''
+tags = ["key", "API", "generic"]
+severity = "HIGH"
+
+[[rules]]
+id = "openai-api-key"
+description = "OpenAI API Key"
+regex = '''(?i)sk-[a-zA-Z0-9]{48}'''
+tags = ["key", "API", "openai"]
+severity = "CRITICAL"
+
+[[rules]]
+id = "mongoose-connection-string"
+description = "MongoDB Connection String"
+regex = '''(?i)(mongodb(?:\+srv)?:\/\/)[^'"]*'''
+tags = ["mongodb", "connection", "credentials"]
+severity = "CRITICAL"
+
+[[rules]]
+id = "jwt-secret"
+description = "JWT Secret"
+regex = '''(?i)(jwt|token)[ _]*(secret|key)[ ]*[=:][ ]*['"][^'"]{8,}['"]'''
+tags = ["jwt", "token", "secret"]
+severity = "HIGH"
+
+[[rules]]
+id = "vercel-api-token"
+description = "Vercel API Token"
+regex = '''(?i)(?:VERCEL|NOW)_(?:API_)?TOKEN[ ]*[=:][ ]*['"][^'"]{24}['"]'''
+tags = ["vercel", "token", "api"]
+severity = "HIGH"
+
+# Allow specific files to be ignored
+[[allowlist]]
+paths = [
+  '''(.*?)gitleaks\.toml$''',
+  '''(.*?)\.md$''',
+  '''(.*?)\.example$''',
+  '''(.*?)package\.json$''',
+  '''(.*?)package-lock\.json$''',
+  '''(.*?)yarn\.lock$''',
+  '''(.*?)bun\.lock$''',
+] 

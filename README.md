@@ -130,5 +130,23 @@ bun format
 bun check
 ```
 
+## CI/CD Pipeline
+
+The project includes a GitHub Actions workflow for continuous integration that runs automatically when:
+- Code is pushed to the main branch
+- A pull request is opened or updated against the main branch
+
+### CI Pipeline Components:
+
+1. **Linting and Formatting**:
+   - Runs Biome to check and format code according to project standards
+   - Ensures consistent code style across the codebase
+
+2. **Security Checks**:
+   - Scans code for hardcoded secrets or API keys using Gitleaks
+   - Runs npm audit to identify security vulnerabilities in dependencies
+
+The deployment is handled automatically by Vercel when changes are pushed to the main branch.
+
 ## Deployment
 The application is configured for deployment on Vercel with the included `vercel.json` configuration.
