@@ -59,6 +59,7 @@ Required environment variables:
 - `PORT`: Port for the server (default: 3000)
 - `CLERK_WEBHOOK_SECRET`: Clerk Webhhok Secret
 - `OPENAI_API_KEY`: OpenAI API key for AI features
+- `FRONTEND_URL`: Your site URL for OpenAI referrer tracking
 - `SPHERE_ENGINE_TOKEN`: Sphere Engine token for code compilation
 - `SPHERE_ENGINE_SUBMIT_URL`: Sphere Engine submission URL
 - `SPHERE_ENGINE_STATUS_URL`: Sphere Engine status check URL
@@ -112,6 +113,7 @@ The platform includes several AI-powered features to assist with competitive pro
 3. **Code Optimization**: Suggest optimized versions focusing on time or space efficiency
 4. **Test Case Generation**: Generate comprehensive test cases, including edge cases
 
+These features are powered by OpenAI
 For detailed documentation on AI features, see [AI Features Documentation](docs/ai-features.md).
 
 ## Development Workflow

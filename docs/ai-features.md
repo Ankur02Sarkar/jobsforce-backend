@@ -98,7 +98,7 @@ Generates comprehensive test cases, including edge cases and performance tests:
 
 The AI features are implemented using:
 
-1. **OpenAI API**: Utilizes GPT-4o to analyze code, generate optimizations, and create test cases
+1. **OpenAI API**: Utilizes multiple AI models for different types of analysis
 2. **Database Integration**: Stores analysis results for future reference
 3. **JWT Authentication**: All AI endpoints are protected and require authentication
 
@@ -108,6 +108,7 @@ The following environment variables are required:
 
 ```
 OPENAI_API_KEY=your_openai_api_key
+FRONTEND_URL=your_website_url
 ```
 
 ## Future Enhancements
