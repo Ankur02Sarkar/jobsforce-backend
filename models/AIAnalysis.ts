@@ -68,6 +68,13 @@ const aiAnalysisSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    interviewId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Interview",
+    },
+    questionId: {
+      type: Number,
+    },
     problemId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Problem",
@@ -80,6 +87,7 @@ const aiAnalysisSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    analysisText: String,
     algorithmAnalysis: algorithmAnalysisSchema,
     complexityAnalysis: complexityAnalysisSchema,
     optimizationSuggestions: optimizationSuggestionsSchema,
@@ -87,8 +95,11 @@ const aiAnalysisSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  },
+  }
 );
+
+// Create compound index for efficient lookups
+aiAnalysisSchema.index({ userId: 1, interviewId: 1, questionId: 1, code: 1 });
 
 const AIAnalysis = mongoose.model("AIAnalysis", aiAnalysisSchema);
 

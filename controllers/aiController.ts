@@ -22,7 +22,7 @@ const asyncHandler = (fn: Function) => (req: Request, res: Response) => {
  */
 export const analyzeSolution = asyncHandler(
   async (req: AuthRequest, res: Response) => {
-    const { code, language, problemStatement, problemId } = req.body;
+    const { code, language, problemStatement, problemId, interviewId, questionId } = req.body;
 
     if (!code || !language) {
       return res.status(400).json({
@@ -32,46 +32,77 @@ export const analyzeSolution = asyncHandler(
     }
 
     try {
-      const analysisText = await openAIService.analyzeCode(
-        code,
-        language,
-        problemStatement,
-      );
+      if (!req.user) {
+        return res.status(401).json({
+          success: false,
+          message: "Authentication required",
+        });
+      }
 
-      // Parse the analysis text to extract structured data
-      // This is a simplified example - in production, you'd implement more robust parsing
-      const algorithmAnalysis = {
-        approachIdentified: "Algorithm identified from analysis",
-        optimizationTips: ["Extracted tip 1", "Extracted tip 2"],
-        edgeCasesFeedback: ["Edge case 1", "Edge case 2"],
-        alternativeApproaches: [
-          {
-            description: "Alternative approach description",
-            complexity: "O(n)",
-            suitability: "Good for small inputs",
+      // Check if we already have analysis for this code and question
+      let existingAnalysis = null;
+      
+      if (interviewId && questionId) {
+        existingAnalysis = await AIAnalysis.findOne({
+          userId: req.user._id,
+          interviewId,
+          questionId,
+          code,
+        });
+      } else if (problemId) {
+        existingAnalysis = await AIAnalysis.findOne({
+          userId: req.user._id,
+          problemId,
+          code,
+        });
+      }
+
+      // If we have cached results, return them
+      if (existingAnalysis && existingAnalysis.algorithmAnalysis) {
+        return res.status(200).json({
+          success: true,
+          message: "Cached code analysis retrieved",
+          data: { 
+            analysisText: existingAnalysis.analysisText,
+            algorithmAnalysis: existingAnalysis.algorithmAnalysis,
+            fromCache: true,
           },
-        ],
-      };
+        });
+      }
 
-      // Save to database if user is authenticated
-      if (req.user) {
+      // Otherwise, get new analysis from API
+      const analysisResult = await openAIService.analyzeCode(code, language, problemStatement);
+      
+      // No need to parse manually - the service now returns structured data directly
+      const { algorithmAnalysis, analysisText } = analysisResult;
+
+      // Save to database
+      if (existingAnalysis) {
+        existingAnalysis.set('algorithmAnalysis', algorithmAnalysis);
+        existingAnalysis.set('analysisText', analysisText);
+        await existingAnalysis.save();
+      } else {
         const analysis = new AIAnalysis({
           userId: req.user._id,
+          interviewId: interviewId || null,
+          questionId: questionId || null,
           problemId: problemId || null,
           code,
           language,
+          analysisText,
           algorithmAnalysis,
         });
 
         await analysis.save();
       }
-
+      
       return res.status(200).json({
         success: true,
         message: "Code analysis completed",
-        data: {
+        data: { 
           analysisText,
           algorithmAnalysis,
+          fromCache: false,
         },
       });
     } catch (error) {
@@ -91,7 +122,7 @@ export const analyzeSolution = asyncHandler(
  */
 export const complexityAnalysis = asyncHandler(
   async (req: AuthRequest, res: Response) => {
-    const { code, language, problemType, problemId } = req.body;
+    const { code, language, problemType, problemId, interviewId, questionId } = req.body;
 
     if (!code || !language) {
       return res.status(400).json({
@@ -101,62 +132,76 @@ export const complexityAnalysis = asyncHandler(
     }
 
     try {
-      const analysisText = await openAIService.analyzeComplexity(
-        code,
-        language,
-        problemType,
-      );
-
-      // Parse the analysis text to extract structured data
-      // This is a simplified example - in production, you'd implement more robust parsing
-      const complexityAnalysis = {
-        timeComplexity: {
-          bestCase: "O(n)",
-          averageCase: "O(n log n)",
-          worstCase: "O(n²)",
-        },
-        spaceComplexity: "O(n)",
-        criticalOperations: [
-          {
-            operation: "Nested loop",
-            impact: "Dominates time complexity",
-            lineNumbers: [10, 15],
-          },
-        ],
-        comparisonToOptimal:
-          "The optimal solution for this problem is O(n log n)",
-      };
-
-      // Save to database if user is authenticated
-      if (req.user) {
-        // Check if analysis exists and update, or create new
-        const existingAnalysis = await AIAnalysis.findOne({
-          userId: req.user._id,
-          problemId: problemId || null,
-          code,
+      if (!req.user) {
+        return res.status(401).json({
+          success: false,
+          message: "Authentication required",
         });
-
-        if (existingAnalysis) {
-          existingAnalysis.set("complexityAnalysis", complexityAnalysis);
-          await existingAnalysis.save();
-        } else {
-          const analysis = new AIAnalysis({
-            userId: req.user._id,
-            problemId: problemId || null,
-            code,
-            language,
-            complexityAnalysis,
-          });
-          await analysis.save();
-        }
       }
 
+      // Check if we already have analysis for this code and question
+      let existingAnalysis = null;
+      
+      if (interviewId && questionId) {
+        existingAnalysis = await AIAnalysis.findOne({
+          userId: req.user._id,
+          interviewId,
+          questionId,
+          code,
+        });
+      } else if (problemId) {
+        existingAnalysis = await AIAnalysis.findOne({
+          userId: req.user._id,
+          problemId,
+          code,
+        });
+      }
+
+      // If we have cached results, return them
+      if (existingAnalysis && existingAnalysis.complexityAnalysis) {
+        return res.status(200).json({
+          success: true,
+          message: "Cached complexity analysis retrieved",
+          data: { 
+            analysisText: existingAnalysis.analysisText,
+            complexityAnalysis: existingAnalysis.complexityAnalysis,
+            fromCache: true,
+          },
+        });
+      }
+
+      // Otherwise, get new analysis from API
+      const complexityResult = await openAIService.analyzeComplexity(code, language, problemType);
+      
+      // No need to parse manually - the service now returns structured data directly
+      const { complexityAnalysis, analysisText } = complexityResult;
+
+      // Save to database
+      if (existingAnalysis) {
+        existingAnalysis.set('complexityAnalysis', complexityAnalysis);
+        existingAnalysis.set('analysisText', analysisText);
+        await existingAnalysis.save();
+      } else {
+        const analysis = new AIAnalysis({
+          userId: req.user._id,
+          interviewId: interviewId || null,
+          questionId: questionId || null,
+          problemId: problemId || null,
+          code,
+          language,
+          analysisText,
+          complexityAnalysis,
+        });
+        await analysis.save();
+      }
+      
       return res.status(200).json({
         success: true,
         message: "Complexity analysis completed",
-        data: {
+        data: { 
           analysisText,
           complexityAnalysis,
+          fromCache: false,
         },
       });
     } catch (error) {
@@ -176,8 +221,7 @@ export const complexityAnalysis = asyncHandler(
  */
 export const optimizeSolution = asyncHandler(
   async (req: AuthRequest, res: Response) => {
-    const { code, language, problemStatement, optimizationFocus, problemId } =
-      req.body;
+    const { code, language, problemStatement, optimizationFocus, problemId, interviewId, questionId } = req.body;
 
     if (!code || !language || !problemStatement) {
       return res.status(400).json({
@@ -186,7 +230,7 @@ export const optimizeSolution = asyncHandler(
       });
     }
 
-    if (!optimizationFocus || !["time", "space"].includes(optimizationFocus)) {
+    if (!optimizationFocus || !['time', 'space'].includes(optimizationFocus)) {
       return res.status(400).json({
         success: false,
         message: "Valid optimization focus (time or space) is required",
@@ -194,60 +238,81 @@ export const optimizeSolution = asyncHandler(
     }
 
     try {
-      const optimizationText = await openAIService.optimizeCode(
+      if (!req.user) {
+        return res.status(401).json({
+          success: false,
+          message: "Authentication required",
+        });
+      }
+
+      // Check if we already have analysis for this code and question
+      let existingAnalysis = null;
+      
+      if (interviewId && questionId) {
+        existingAnalysis = await AIAnalysis.findOne({
+          userId: req.user._id,
+          interviewId,
+          questionId,
+          code,
+        });
+      } else if (problemId) {
+        existingAnalysis = await AIAnalysis.findOne({
+          userId: req.user._id,
+          problemId,
+          code,
+        });
+      }
+
+      // If we have cached results, return them
+      if (existingAnalysis && existingAnalysis.optimizationSuggestions) {
+        return res.status(200).json({
+          success: true,
+          message: "Cached optimization suggestions retrieved",
+          data: { 
+            optimizationText: existingAnalysis.analysisText,
+            optimizationSuggestions: existingAnalysis.optimizationSuggestions,
+            fromCache: true,
+          },
+        });
+      }
+
+      // Otherwise, get new analysis from API
+      const optimizationResult = await openAIService.optimizeCode(
         code,
         language,
         problemStatement,
-        optimizationFocus as "time" | "space",
+        optimizationFocus as 'time' | 'space'
       );
+      
+      // No need to parse manually - the service now returns structured data directly
+      const { optimizationSuggestions, analysisText } = optimizationResult;
 
-      // Parse the optimization text to extract structured data
-      // This is a simplified example - in production, you'd implement more robust parsing
-      const optimizationSuggestions = {
-        optimizedCode: "Extracted optimized code",
-        improvements: [
-          {
-            description: "Used memoization to avoid redundant calculations",
-            complexityBefore: "O(2^n)",
-            complexityAfter: "O(n)",
-            algorithmicChange: "Dynamic Programming approach",
-          },
-        ],
-      };
-
-      // Save to database if user is authenticated
-      if (req.user) {
-        // Check if analysis exists and update, or create new
-        const existingAnalysis = await AIAnalysis.findOne({
+      // Save to database
+      if (existingAnalysis) {
+        existingAnalysis.set('optimizationSuggestions', optimizationSuggestions);
+        existingAnalysis.set('analysisText', analysisText);
+        await existingAnalysis.save();
+      } else {
+        const analysis = new AIAnalysis({
           userId: req.user._id,
+          interviewId: interviewId || null,
+          questionId: questionId || null,
           problemId: problemId || null,
           code,
+          language,
+          analysisText,
+          optimizationSuggestions,
         });
-
-        if (existingAnalysis) {
-          existingAnalysis.set(
-            "optimizationSuggestions",
-            optimizationSuggestions,
-          );
-          await existingAnalysis.save();
-        } else {
-          const analysis = new AIAnalysis({
-            userId: req.user._id,
-            problemId: problemId || null,
-            code,
-            language,
-            optimizationSuggestions,
-          });
-          await analysis.save();
-        }
+        await analysis.save();
       }
-
+      
       return res.status(200).json({
         success: true,
         message: "Solution optimization completed",
-        data: {
-          optimizationText,
+        data: { 
+          optimizationText: analysisText,
           optimizationSuggestions,
+          fromCache: false,
         },
       });
     } catch (error) {
@@ -267,7 +332,7 @@ export const optimizeSolution = asyncHandler(
  */
 export const generateTestCases = asyncHandler(
   async (req: AuthRequest, res: Response) => {
-    const { problemStatement, constraints, solutionHint, problemId } = req.body;
+    const { problemStatement, constraints, solutionHint, problemId, interviewId, questionId } = req.body;
 
     if (!problemStatement || !constraints) {
       return res.status(400).json({
@@ -277,60 +342,86 @@ export const generateTestCases = asyncHandler(
     }
 
     try {
-      const testCasesText = await openAIService.generateTestCases(
-        problemStatement,
-        constraints,
-        solutionHint,
-      );
-
-      // Parse the test cases text to extract structured data
-      // This is a simplified example - in production, you'd implement more robust parsing
-      const testCases = [
-        {
-          input: { n: 5, arr: [1, 2, 3, 4, 5] },
-          expectedOutput: 15,
-          purpose: "Basic test with sequential array",
-          difficulty: "easy",
-          performanceTest: false,
-        },
-        {
-          input: { n: 10000, arr: Array(10000).fill(1) },
-          expectedOutput: 10000,
-          purpose: "Performance test with large input",
-          difficulty: "hard",
-          performanceTest: true,
-        },
-      ];
-
-      // Save to database if user is authenticated
-      if (req.user && problemId) {
-        // Check if analysis exists and update, or create new
-        const existingAnalysis = await AIAnalysis.findOne({
-          userId: req.user._id,
-          problemId,
+      if (!req.user) {
+        return res.status(401).json({
+          success: false,
+          message: "Authentication required",
         });
-
-        if (existingAnalysis) {
-          existingAnalysis.set("testCases", testCases);
-          await existingAnalysis.save();
-        } else {
-          const analysis = new AIAnalysis({
-            userId: req.user._id,
-            problemId,
-            code: "", // No code for test case generation
-            language: "none",
-            testCases,
-          });
-          await analysis.save();
-        }
       }
 
+      // Check if we already have analysis for this question
+      let existingAnalysis = null;
+      let query = {};
+      
+      if (interviewId && questionId) {
+        query = {
+          userId: req.user._id,
+          interviewId,
+          questionId,
+        };
+      } else if (problemId) {
+        query = {
+          userId: req.user._id,
+          problemId,
+        };
+      } else {
+        return res.status(400).json({
+          success: false,
+          message: "Either interviewId + questionId or problemId is required",
+        });
+      }
+      
+      existingAnalysis = await AIAnalysis.findOne(query);
+
+      // If we have cached results, return them
+      if (existingAnalysis && existingAnalysis.testCases && existingAnalysis.testCases.length > 0) {
+        return res.status(200).json({
+          success: true,
+          message: "Cached test cases retrieved",
+          data: { 
+            testCasesText: existingAnalysis.analysisText,
+            testCases: existingAnalysis.testCases,
+            fromCache: true,
+          },
+        });
+      }
+
+      // Otherwise, get new test cases from API
+      const testCaseResult = await openAIService.generateTestCases(
+        problemStatement,
+        constraints,
+        solutionHint
+      );
+      
+      // No need to parse manually - the service now returns structured data directly
+      const { testCases, analysisText } = testCaseResult;
+
+      // Save to database
+      if (existingAnalysis) {
+        existingAnalysis.set('testCases', testCases);
+        existingAnalysis.set('analysisText', analysisText);
+        await existingAnalysis.save();
+      } else {
+        const analysis = new AIAnalysis({
+          userId: req.user._id,
+          interviewId: interviewId || null,
+          questionId: questionId || null,
+          problemId: problemId || null,
+          code: "",  // No code for test case generation
+          language: "none",
+          analysisText,
+          testCases,
+        });
+        await analysis.save();
+      }
+      
       return res.status(200).json({
         success: true,
         message: "Test case generation completed",
-        data: {
-          testCasesText,
+        data: { 
+          testCasesText: analysisText,
           testCases,
+          fromCache: false,
         },
       });
     } catch (error) {
