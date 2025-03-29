@@ -279,9 +279,9 @@ export const getOrCreateInterviewByJobId = asyncHandler(
     }
 
     // Try to find an existing interview that was created from this job
-    let interview = await Interview.findOne({ 
+    let interview = await Interview.findOne({
       userId: req.user._id,
-      jobId: jobId 
+      jobId: jobId,
     });
 
     // If no interview exists, create one
@@ -294,7 +294,7 @@ export const getOrCreateInterviewByJobId = asyncHandler(
         duration: 60,
         questions: [],
         feedback: "",
-        jobId: jobId
+        jobId: jobId,
       });
     }
 

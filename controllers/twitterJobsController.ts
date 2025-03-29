@@ -83,15 +83,15 @@ async function fetchTwitterJobs(
         "sec-fetch-mode": "cors",
         "sec-fetch-site": "same-origin",
         "x-client-transaction-id":
-          "ufG3vVITJZTH7nxHB4I7wNp8ar9xDoFwyWSkUN8aTH6M5vYAYhVdVQ+s9KfrP+8vV5FaK7rLnV9AEIc1L7/YJcAS0y9qug",
-        "x-client-uuid": "958cd791-55d4-4157-a6f3-a3d5e04dcd8d",
+          "rNWEl5p9x7Atz+AyQGTvCmX5ywV4jYFI440gJrMcCLV9ZY4IvmpJBbKJwvujiS+jeNYBNK8JN9YEleu5+pXaDPI5FfvErw",
+        "x-client-uuid": "4d2cc102-7c9f-41ec-8078-0c2a774fddf5",
         "x-csrf-token":
-          "6b40994b2f9fdb3403eaac106c783106d17db771afeb1adfe480df7111d662d9d808971bc94c97c3873de19f6307e27c89efd024ea03f60e5da2d06f58a074cf332a3107b353ee71a0f03481a0e54c50",
+          "a81ee77313eb00f5ee68c5f0797baa16fb4eed64ccd749b2065e3a3484bcf9fd2901b45bd2c472d4e7e2580a1a258596574e21e44984c0c038b1f1821830dff962dbbbbc73a8fb677f3928b5d955589f",
         "x-twitter-active-user": "yes",
         "x-twitter-auth-type": "OAuth2Session",
         "x-twitter-client-language": "en",
         cookie:
-          'night_mode=2; kdt=dqdM1Qk1r2PqvPM5QoXUvvei4BuWSjyNRNzEBqgf; lang=en; _ga=GA1.1.1112572781.1739103139; _ga_Z8SSQG6MF6=GS1.1.1739103139.1.0.1739103148.51.0.0; dnt=1; __cf_bm=ix5DbPYzYPaTAa_j50v13VLCSh8AtXb9rN8G4Bh9xVQ-1742882255-1.0.1.1-Dg.d2SMnUQtIQdSkOdE2l04LUdQncmerXjfrti6D8lF2v.XnFRuOTPxlynjXm4tMYjZxwOTo4nICVWwsoLmxZyuDZejTh9oRb7uBJIlPABs; att=1-isNfq5u7HCfWALpc7qTk5UUANREVIB6vN1K1egkZ; guest_id=v1%3A174288229009956697; guest_id_marketing=v1%3A174288229009956697; guest_id_ads=v1%3A174288229009956697; gt=1904412471454261373; _twitter_sess=BAh7CSIKZmxhc2hJQzonQWN0aW9uQ29udHJvbGxlcjo6Rmxhc2g6OkZsYXNo%250ASGFzaHsABjoKQHVzZWR7ADoPY3JlYXRlZF9hdGwrCD1L4cuVAToMY3NyZl9p%250AZCIlNzM3MGZhZDI2MTA0ZmI3NDljYWQzZWYwN2VjNmRmODU6B2lkIiVmNTJh%250ANTEyZmM2ZGZkOGJmOTc4NDFjMDkzM2QzYmNiOQ%253D%253D--cfe3efc86f3d593eae45914d07727db7071e3f16; auth_token=6d8b7f4c5210b1dfad85ec37243704277e45e5bf; twid=u%3D1904412626014388225; ct0=6b40994b2f9fdb3403eaac106c783106d17db771afeb1adfe480df7111d662d9d808971bc94c97c3873de19f6307e27c89efd024ea03f60e5da2d06f58a074cf332a3107b353ee71a0f03481a0e54c50; personalization_id="v1_F613Sy+XauvaZir0LqqfJg=="',
+          'night_mode=2; kdt=dqdM1Qk1r2PqvPM5QoXUvvei4BuWSjyNRNzEBqgf; lang=en; _ga=GA1.1.1112572781.1739103139; _ga_Z8SSQG6MF6=GS1.1.1739103139.1.0.1739103148.51.0.0; dnt=1; __cf_bm=VkJG0K6.Q0B5Hc1DHumUgAtUR_j_IH0pMZOVbdbUFIM-1743261783-1.0.1.1-KgYZBPqhVzbixuA8CXPwnh.8QgDsCpnoZeLsKF0K4OAbfsJGxHcxw6PBt.G1nrmw8KI5VTqdEfU0iyEru0wcnhn9HAV1hwzWOquATatBhuo; guest_id=v1%3A174326179282981614; guest_id_marketing=v1%3A174326179282981614; guest_id_ads=v1%3A174326179282981614; gt=1906004221285269918; att=1-EgrX0dOh6ZJN4jjhds4S3DzCV168c4SysOO7y3oz; _twitter_sess=BAh7BiIKZmxhc2hJQzonQWN0aW9uQ29udHJvbGxlcjo6Rmxhc2g6OkZsYXNo%250ASGFzaHsABjoKQHVzZWR7AA%253D%253D--1164b91ac812d853b877e93ddb612b7471bebc74; auth_token=8fa8bac812aadc863bb48a0d9ea7bae0875476da; ct0=a81ee77313eb00f5ee68c5f0797baa16fb4eed64ccd749b2065e3a3484bcf9fd2901b45bd2c472d4e7e2580a1a258596574e21e44984c0c038b1f1821830dff962dbbbbc73a8fb677f3928b5d955589f; twid=u%3D1906004479004327936; personalization_id="v1_F613Sy+XauvaZir0LqqfJg=="',
         Referer: `https://x.com/jobs?q=${keyword}&lstr=${job_location}`,
         "Referrer-Policy": "strict-origin-when-cross-origin",
       },
@@ -215,15 +215,15 @@ async function fetchTwitterJobById(jobId: string, loggedIn: boolean) {
         "sec-fetch-mode": "cors",
         "sec-fetch-site": "same-origin",
         "x-client-transaction-id":
-          "HFQSGPe2gDFiS9nioieeZX/ZzxrUqyTVbMEB9Xq/6dspQ1Olx7D48KoJUQJOmkqK8jT/jh+Wo0+io74O/wR145J6FbzNHw",
-        "x-client-uuid": "958cd791-55d4-4157-a6f3-a3d5e04dcd8d",
+          "Bn8uPTDXbRqHZUqY6s5FoM9TYa/SJyviSSeKjBm2oh/XzySiFMDjrxgjaFEJI4UJ0n2rngWjc/CsU7RWCrbnJaN6KDvrBQ",
+        "x-client-uuid": "4d2cc102-7c9f-41ec-8078-0c2a774fddf5",
         "x-csrf-token":
-          "6b40994b2f9fdb3403eaac106c783106d17db771afeb1adfe480df7111d662d9d808971bc94c97c3873de19f6307e27c89efd024ea03f60e5da2d06f58a074cf332a3107b353ee71a0f03481a0e54c50",
+          "a81ee77313eb00f5ee68c5f0797baa16fb4eed64ccd749b2065e3a3484bcf9fd2901b45bd2c472d4e7e2580a1a258596574e21e44984c0c038b1f1821830dff962dbbbbc73a8fb677f3928b5d955589f",
         "x-twitter-active-user": "yes",
         "x-twitter-auth-type": "OAuth2Session",
         "x-twitter-client-language": "en",
         cookie:
-          'night_mode=2; kdt=dqdM1Qk1r2PqvPM5QoXUvvei4BuWSjyNRNzEBqgf; lang=en; _ga=GA1.1.1112572781.1739103139; _ga_Z8SSQG6MF6=GS1.1.1739103139.1.0.1739103148.51.0.0; dnt=1; __cf_bm=ix5DbPYzYPaTAa_j50v13VLCSh8AtXb9rN8G4Bh9xVQ-1742882255-1.0.1.1-Dg.d2SMnUQtIQdSkOdE2l04LUdQncmerXjfrti6D8lF2v.XnFRuOTPxlynjXm4tMYjZxwOTo4nICVWwsoLmxZyuDZejTh9oRb7uBJIlPABs; att=1-isNfq5u7HCfWALpc7qTk5UUANREVIB6vN1K1egkZ; guest_id=v1%3A174288229009956697; guest_id_marketing=v1%3A174288229009956697; guest_id_ads=v1%3A174288229009956697; gt=1904412471454261373; _twitter_sess=BAh7CSIKZmxhc2hJQzonQWN0aW9uQ29udHJvbGxlcjo6Rmxhc2g6OkZsYXNo%250ASGFzaHsABjoKQHVzZWR7ADoPY3JlYXRlZF9hdGwrCD1L4cuVAToMY3NyZl9p%250AZCIlNzM3MGZhZDI2MTA0ZmI3NDljYWQzZWYwN2VjNmRmODU6B2lkIiVmNTJh%250ANTEyZmM2ZGZkOGJmOTc4NDFjMDkzM2QzYmNiOQ%253D%253D--cfe3efc86f3d593eae45914d07727db7071e3f16; auth_token=6d8b7f4c5210b1dfad85ec37243704277e45e5bf; twid=u%3D1904412626014388225; ct0=6b40994b2f9fdb3403eaac106c783106d17db771afeb1adfe480df7111d662d9d808971bc94c97c3873de19f6307e27c89efd024ea03f60e5da2d06f58a074cf332a3107b353ee71a0f03481a0e54c50; personalization_id="v1_F613Sy+XauvaZir0LqqfJg=="',
+          'night_mode=2; kdt=dqdM1Qk1r2PqvPM5QoXUvvei4BuWSjyNRNzEBqgf; lang=en; _ga=GA1.1.1112572781.1739103139; _ga_Z8SSQG6MF6=GS1.1.1739103139.1.0.1739103148.51.0.0; dnt=1; __cf_bm=VkJG0K6.Q0B5Hc1DHumUgAtUR_j_IH0pMZOVbdbUFIM-1743261783-1.0.1.1-KgYZBPqhVzbixuA8CXPwnh.8QgDsCpnoZeLsKF0K4OAbfsJGxHcxw6PBt.G1nrmw8KI5VTqdEfU0iyEru0wcnhn9HAV1hwzWOquATatBhuo; guest_id=v1%3A174326179282981614; guest_id_marketing=v1%3A174326179282981614; guest_id_ads=v1%3A174326179282981614; gt=1906004221285269918; att=1-EgrX0dOh6ZJN4jjhds4S3DzCV168c4SysOO7y3oz; _twitter_sess=BAh7BiIKZmxhc2hJQzonQWN0aW9uQ29udHJvbGxlcjo6Rmxhc2g6OkZsYXNo%250ASGFzaHsABjoKQHVzZWR7AA%253D%253D--1164b91ac812d853b877e93ddb612b7471bebc74; auth_token=8fa8bac812aadc863bb48a0d9ea7bae0875476da; ct0=a81ee77313eb00f5ee68c5f0797baa16fb4eed64ccd749b2065e3a3484bcf9fd2901b45bd2c472d4e7e2580a1a258596574e21e44984c0c038b1f1821830dff962dbbbbc73a8fb677f3928b5d955589f; twid=u%3D1906004479004327936; personalization_id="v1_F613Sy+XauvaZir0LqqfJg=="',
         Referer:
           "https://x.com/jobs/1874245712197935104?q=frontend%20dev&lstr=bangalore",
         "Referrer-Policy": "strict-origin-when-cross-origin",

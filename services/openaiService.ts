@@ -10,8 +10,8 @@ dotenv.config();
 const sanitizeJsonResponse = (content: string): string => {
   // Remove markdown code block markers if present
   return content
-    .replace(/^```(?:json)?[\r\n]/, '')
-    .replace(/```$/, '')
+    .replace(/^```(?:json)?[\r\n]/, "")
+    .replace(/```$/, "")
     .trim();
 };
 
@@ -72,10 +72,15 @@ export class OpenAIService {
         response_format: { type: "json_object" },
       });
 
-      console.log("analyzeCode response : ", response.choices[0]?.message?.content)
+      console.log(
+        "analyzeCode response : ",
+        response.choices[0]?.message?.content,
+      );
 
       // Parse the response content as JSON, sanitizing first
-      const sanitizedContent = sanitizeJsonResponse(response.choices[0]?.message?.content || "{}");
+      const sanitizedContent = sanitizeJsonResponse(
+        response.choices[0]?.message?.content || "{}",
+      );
       const analysisData = JSON.parse(sanitizedContent);
 
       // Return both the structured data and the full analysis text
@@ -100,7 +105,7 @@ export class OpenAIService {
           alternativeApproaches: [],
         },
         analysisText: "Error performing code analysis",
-        error: true
+        error: true,
       };
     }
   }
@@ -142,10 +147,15 @@ export class OpenAIService {
         response_format: { type: "json_object" },
       });
 
-      console.log("analyzeComplexity response : ", response.choices[0]?.message?.content)
+      console.log(
+        "analyzeComplexity response : ",
+        response.choices[0]?.message?.content,
+      );
 
       // Parse the response content as JSON, sanitizing first
-      const sanitizedContent = sanitizeJsonResponse(response.choices[0]?.message?.content || "{}");
+      const sanitizedContent = sanitizeJsonResponse(
+        response.choices[0]?.message?.content || "{}",
+      );
       const complexityData = JSON.parse(sanitizedContent);
 
       // Return both the structured data and the full analysis text
@@ -177,7 +187,7 @@ export class OpenAIService {
           comparisonToOptimal: "Could not compare to optimal solution",
         },
         analysisText: "Error performing complexity analysis",
-        error: true
+        error: true,
       };
     }
   }
@@ -221,10 +231,15 @@ export class OpenAIService {
         response_format: { type: "json_object" },
       });
 
-      console.log("optimizeCode response : ", response.choices[0]?.message?.content)
+      console.log(
+        "optimizeCode response : ",
+        response.choices[0]?.message?.content,
+      );
 
       // Parse the response content as JSON, sanitizing first
-      const sanitizedContent = sanitizeJsonResponse(response.choices[0]?.message?.content || "{}");
+      const sanitizedContent = sanitizeJsonResponse(
+        response.choices[0]?.message?.content || "{}",
+      );
       const optimizationData = JSON.parse(sanitizedContent);
 
       // Return both the structured data and the full explanation text
@@ -253,7 +268,7 @@ export class OpenAIService {
           ],
         },
         analysisText: "Error performing code optimization",
-        error: true
+        error: true,
       };
     }
   }
@@ -306,32 +321,38 @@ export class OpenAIService {
         response_format: { type: "json_object" },
       });
 
-      console.log("generateTestCases response : ", response.choices[0]?.message?.content)
+      console.log(
+        "generateTestCases response : ",
+        response.choices[0]?.message?.content,
+      );
 
       // Parse the response content as JSON, sanitizing first
       let testCaseData;
       try {
         const content = response.choices[0]?.message?.content || "{}";
         const sanitizedContent = sanitizeJsonResponse(content);
-        
+
         // Try to remove any potential Python expressions or other invalid JSON
         // This regex finds Python-like list comprehensions and replaces them with empty arrays
         const cleanedContent = sanitizedContent
-          .replace(/\[[^\]]*for[^\]]*\]/g, '[]')
-          .replace(/range\(\d+\)/g, '[]');
-        
+          .replace(/\[[^\]]*for[^\]]*\]/g, "[]")
+          .replace(/range\(\d+\)/g, "[]");
+
         testCaseData = JSON.parse(cleanedContent);
-        
+
         // Validate that testCases is an array
         if (testCaseData.testCases && !Array.isArray(testCaseData.testCases)) {
           testCaseData.testCases = [];
         }
       } catch (jsonError) {
         console.error("Error parsing JSON response:", jsonError);
-        console.log("Raw response content:", response.choices[0]?.message?.content);
+        console.log(
+          "Raw response content:",
+          response.choices[0]?.message?.content,
+        );
         testCaseData = {
           testCases: [],
-          explanationText: "Failed to parse response as JSON"
+          explanationText: "Failed to parse response as JSON",
         };
       }
 
@@ -354,7 +375,7 @@ export class OpenAIService {
           },
         ],
         analysisText: "Error generating test cases",
-        error: true
+        error: true,
       };
     }
   }

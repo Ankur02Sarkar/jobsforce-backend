@@ -335,7 +335,8 @@ export const optimizeSolution = asyncHandler(
       );
 
       // No need to parse manually - the service now returns structured data directly
-      const { optimizationSuggestions, analysisText, error } = optimizationResult;
+      const { optimizationSuggestions, analysisText, error } =
+        optimizationResult;
 
       // Check if there was an error in the optimization
       if (error) {
@@ -398,12 +399,8 @@ export const optimizeSolution = asyncHandler(
  */
 export const generateTestCases = asyncHandler(
   async (req: AuthRequest, res: Response) => {
-    const {
-      problemStatement,
-      constraints,
-      solutionHint,
-      forceRefresh,
-    } = req.body;
+    const { problemStatement, constraints, solutionHint, forceRefresh } =
+      req.body;
 
     if (!problemStatement || !constraints) {
       return res.status(400).json({
