@@ -34,7 +34,7 @@ export class OpenAIService {
   ): Promise<any> {
     try {
       const response = await openai.chat.completions.create({
-        model: "google/gemini-2.0-flash-lite-preview-02-05:free",
+        model: "qwen/qwen2.5-vl-3b-instruct:free",
         messages: [
           {
             role: "system",
@@ -60,6 +60,8 @@ export class OpenAIService {
         temperature: 0.1,
         response_format: { type: "json_object" },
       });
+
+      console.log("analyzeCode response : ", response)
 
       // Parse the response content as JSON
       const analysisData = JSON.parse(
@@ -88,6 +90,7 @@ export class OpenAIService {
           alternativeApproaches: [],
         },
         analysisText: "Error performing code analysis",
+        error: true
       };
     }
   }
@@ -102,7 +105,7 @@ export class OpenAIService {
   ): Promise<any> {
     try {
       const response = await openai.chat.completions.create({
-        model: "google/gemini-2.0-flash-lite-preview-02-05:free",
+        model: "qwen/qwen2.5-vl-3b-instruct:free",
         messages: [
           {
             role: "system",
@@ -128,6 +131,8 @@ export class OpenAIService {
         temperature: 0.1,
         response_format: { type: "json_object" },
       });
+
+      console.log("analyzeComplexity response : ", response)
 
       // Parse the response content as JSON
       const complexityData = JSON.parse(
@@ -163,6 +168,7 @@ export class OpenAIService {
           comparisonToOptimal: "Could not compare to optimal solution",
         },
         analysisText: "Error performing complexity analysis",
+        error: true
       };
     }
   }
@@ -178,7 +184,7 @@ export class OpenAIService {
   ): Promise<any> {
     try {
       const response = await openai.chat.completions.create({
-        model: "google/gemini-2.0-flash-lite-preview-02-05:free",
+        model: "qwen/qwen2.5-vl-3b-instruct:free",
         messages: [
           {
             role: "system",
@@ -203,6 +209,8 @@ export class OpenAIService {
         temperature: 0.1,
         response_format: { type: "json_object" },
       });
+
+      console.log("optimizeCode response : ", response)
 
       // Parse the response content as JSON
       const optimizationData = JSON.parse(
@@ -235,6 +243,7 @@ export class OpenAIService {
           ],
         },
         analysisText: "Error performing code optimization",
+        error: true
       };
     }
   }
@@ -249,7 +258,7 @@ export class OpenAIService {
   ): Promise<any> {
     try {
       const response = await openai.chat.completions.create({
-        model: "google/gemini-2.0-flash-lite-preview-02-05:free",
+        model: "qwen/qwen2.5-vl-3b-instruct:free",
         messages: [
           {
             role: "system",
@@ -301,6 +310,7 @@ export class OpenAIService {
           },
         ],
         analysisText: "Error generating test cases",
+        error: true
       };
     }
   }

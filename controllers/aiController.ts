@@ -85,7 +85,20 @@ export const analyzeSolution = asyncHandler(
       );
 
       // No need to parse manually - the service now returns structured data directly
-      const { algorithmAnalysis, analysisText } = analysisResult;
+      const { algorithmAnalysis, analysisText, error } = analysisResult;
+
+      // Check if there was an error in the analysis
+      if (error) {
+        return res.status(200).json({
+          success: false,
+          message: "Error performing code analysis",
+          data: {
+            analysisText,
+            algorithmAnalysis,
+            fromCache: false,
+          },
+        });
+      }
 
       // Save to database
       if (existingAnalysis) {
@@ -190,7 +203,20 @@ export const complexityAnalysis = asyncHandler(
       );
 
       // No need to parse manually - the service now returns structured data directly
-      const { complexityAnalysis, analysisText } = complexityResult;
+      const { complexityAnalysis, analysisText, error } = complexityResult;
+
+      // Check if there was an error in the analysis
+      if (error) {
+        return res.status(200).json({
+          success: false,
+          message: "Error performing complexity analysis",
+          data: {
+            analysisText,
+            complexityAnalysis,
+            fromCache: false,
+          },
+        });
+      }
 
       // Save to database
       if (existingAnalysis) {
@@ -309,7 +335,20 @@ export const optimizeSolution = asyncHandler(
       );
 
       // No need to parse manually - the service now returns structured data directly
-      const { optimizationSuggestions, analysisText } = optimizationResult;
+      const { optimizationSuggestions, analysisText, error } = optimizationResult;
+
+      // Check if there was an error in the optimization
+      if (error) {
+        return res.status(200).json({
+          success: false,
+          message: "Error performing code optimization",
+          data: {
+            optimizationText: analysisText,
+            optimizationSuggestions,
+            fromCache: false,
+          },
+        });
+      }
 
       // Save to database
       if (existingAnalysis) {
@@ -405,26 +444,23 @@ export const generateTestCases = asyncHandler(
         });
       }
 
+      // Check if we already have test cases
       existingAnalysis = await AIAnalysis.findOne(query);
 
       // If we have cached results, return them
-      if (
-        existingAnalysis &&
-        existingAnalysis.testCases &&
-        existingAnalysis.testCases.length > 0
-      ) {
+      if (existingAnalysis && existingAnalysis.testCases) {
         return res.status(200).json({
           success: true,
           message: "Cached test cases retrieved",
           data: {
-            testCasesText: existingAnalysis.analysisText,
+            analysisText: existingAnalysis.analysisText,
             testCases: existingAnalysis.testCases,
             fromCache: true,
           },
         });
       }
 
-      // Otherwise, get new test cases from API
+      // Otherwise, generate new test cases
       const testCaseResult = await openAIService.generateTestCases(
         problemStatement,
         constraints,
@@ -432,7 +468,20 @@ export const generateTestCases = asyncHandler(
       );
 
       // No need to parse manually - the service now returns structured data directly
-      const { testCases, analysisText } = testCaseResult;
+      const { testCases, analysisText, error } = testCaseResult;
+
+      // Check if there was an error generating test cases
+      if (error) {
+        return res.status(200).json({
+          success: false,
+          message: "Error generating test cases",
+          data: {
+            analysisText,
+            testCases,
+            fromCache: false,
+          },
+        });
+      }
 
       // Save to database
       if (existingAnalysis) {

@@ -277,7 +277,7 @@ This caching mechanism significantly improves response times for repeated reques
 
 The AI features are implemented using:
 
-1. **OpenAI API**: Utilizes multiple AI models (Gemini) for different types of analysis
+1. **OpenAI API**: Utilizes multiple AI models (Gemini, Qwen 2.5) for different types of analysis
 2. **Database Integration**: Stores analysis results for future reference and caching
 3. **JWT Authentication**: All AI endpoints are protected and require authentication
 
