@@ -4,6 +4,17 @@ import dotenv from "dotenv";
 // Ensure environment variables are loaded
 dotenv.config();
 
+/**
+ * Helper function to sanitize JSON responses that may be wrapped in markdown code blocks
+ */
+const sanitizeJsonResponse = (content: string): string => {
+  // Remove markdown code block markers if present
+  return content
+    .replace(/^```(?:json)?[\r\n]/, '')
+    .replace(/```$/, '')
+    .trim();
+};
+
 // Verify API key is available
 const apiKey = process.env.OPENAI_API_KEY;
 if (!apiKey) {
@@ -63,10 +74,9 @@ export class OpenAIService {
 
       console.log("analyzeCode response : ", response.choices[0]?.message?.content)
 
-      // Parse the response content as JSON
-      const analysisData = JSON.parse(
-        response.choices[0]?.message?.content || "{}",
-      );
+      // Parse the response content as JSON, sanitizing first
+      const sanitizedContent = sanitizeJsonResponse(response.choices[0]?.message?.content || "{}");
+      const analysisData = JSON.parse(sanitizedContent);
 
       // Return both the structured data and the full analysis text
       return {
@@ -134,10 +144,9 @@ export class OpenAIService {
 
       console.log("analyzeComplexity response : ", response.choices[0]?.message?.content)
 
-      // Parse the response content as JSON
-      const complexityData = JSON.parse(
-        response.choices[0]?.message?.content || "{}",
-      );
+      // Parse the response content as JSON, sanitizing first
+      const sanitizedContent = sanitizeJsonResponse(response.choices[0]?.message?.content || "{}");
+      const complexityData = JSON.parse(sanitizedContent);
 
       // Return both the structured data and the full analysis text
       return {
@@ -212,10 +221,9 @@ export class OpenAIService {
 
       console.log("optimizeCode response : ", response.choices[0]?.message?.content)
 
-      // Parse the response content as JSON
-      const optimizationData = JSON.parse(
-        response.choices[0]?.message?.content || "{}",
-      );
+      // Parse the response content as JSON, sanitizing first
+      const sanitizedContent = sanitizeJsonResponse(response.choices[0]?.message?.content || "{}");
+      const optimizationData = JSON.parse(sanitizedContent);
 
       // Return both the structured data and the full explanation text
       return {
@@ -298,14 +306,15 @@ export class OpenAIService {
 
       console.log("generateTestCases response : ", response.choices[0]?.message?.content)
 
-      // Parse the response content as JSON
+      // Parse the response content as JSON, sanitizing first
       let testCaseData;
       try {
         const content = response.choices[0]?.message?.content || "{}";
+        const sanitizedContent = sanitizeJsonResponse(content);
         
         // Try to remove any potential Python expressions or other invalid JSON
         // This regex finds Python-like list comprehensions and replaces them with empty arrays
-        const cleanedContent = content
+        const cleanedContent = sanitizedContent
           .replace(/\[[^\]]*for[^\]]*\]/g, '[]')
           .replace(/range\(\d+\)/g, '[]');
         
