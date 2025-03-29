@@ -258,7 +258,7 @@ export class OpenAIService {
   ): Promise<any> {
     try {
       const response = await openai.chat.completions.create({
-        model: "qwen/qwen2.5-vl-72b-instruct:free",
+        model: "deepseek/deepseek-chat-v3-0324:free",
         messages: [
           {
             role: "system",
@@ -285,6 +285,8 @@ export class OpenAIService {
         temperature: 0.2,
         response_format: { type: "json_object" },
       });
+
+      console.log("generateTestCases response : ", response)
 
       // Parse the response content as JSON
       const testCaseData = JSON.parse(

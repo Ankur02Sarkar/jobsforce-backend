@@ -402,9 +402,7 @@ export const generateTestCases = asyncHandler(
       problemStatement,
       constraints,
       solutionHint,
-      problemId,
-      interviewId,
-      questionId,
+      forceRefresh,
     } = req.body;
 
     if (!problemStatement || !constraints) {
@@ -422,52 +420,14 @@ export const generateTestCases = asyncHandler(
         });
       }
 
-      // Check if we already have analysis for this question
-      let existingAnalysis = null;
-      let query = {};
-
-      if (interviewId && questionId) {
-        query = {
-          userId: req.user._id,
-          interviewId,
-          questionId,
-        };
-      } else if (problemId) {
-        query = {
-          userId: req.user._id,
-          problemId,
-        };
-      } else {
-        return res.status(400).json({
-          success: false,
-          message: "Either interviewId + questionId or problemId is required",
-        });
-      }
-
-      // Check if we already have test cases
-      existingAnalysis = await AIAnalysis.findOne(query);
-
-      // If we have cached results, return them
-      if (existingAnalysis && existingAnalysis.testCases) {
-        return res.status(200).json({
-          success: true,
-          message: "Cached test cases retrieved",
-          data: {
-            analysisText: existingAnalysis.analysisText,
-            testCases: existingAnalysis.testCases,
-            fromCache: true,
-          },
-        });
-      }
-
-      // Otherwise, generate new test cases
+      // Generate new test cases - always fresh
       const testCaseResult = await openAIService.generateTestCases(
         problemStatement,
         constraints,
         solutionHint,
       );
 
-      // No need to parse manually - the service now returns structured data directly
+      // Get structured data from the service
       const { testCases, analysisText, error } = testCaseResult;
 
       // Check if there was an error generating test cases
@@ -478,27 +438,8 @@ export const generateTestCases = asyncHandler(
           data: {
             analysisText,
             testCases,
-            fromCache: false,
           },
         });
-      }
-
-      // Save to database
-      if (existingAnalysis) {
-        existingAnalysis.set("testCases", testCases);
-        existingAnalysis.set("analysisText", analysisText);
-        await existingAnalysis.save();
-      } else {
-        const analysis = new AIAnalysis({
-          userId: req.user._id,
-          interviewId: interviewId || null,
-          questionId: questionId || null,
-          problemId: problemId || null,
-          language: "none",
-          analysisText,
-          testCases,
-        });
-        await analysis.save();
       }
 
       return res.status(200).json({
@@ -507,7 +448,6 @@ export const generateTestCases = asyncHandler(
         data: {
           testCasesText: analysisText,
           testCases,
-          fromCache: false,
         },
       });
     } catch (error) {
