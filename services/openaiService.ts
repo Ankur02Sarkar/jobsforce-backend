@@ -34,7 +34,7 @@ export class OpenAIService {
   ): Promise<any> {
     try {
       const response = await openai.chat.completions.create({
-        model: "qwen/qwen2.5-vl-32b-instruct:free",
+        model: "qwen/qwen2.5-vl-72b-instruct:free",
         messages: [
           {
             role: "system",
@@ -105,7 +105,7 @@ export class OpenAIService {
   ): Promise<any> {
     try {
       const response = await openai.chat.completions.create({
-        model: "qwen/qwen2.5-vl-32b-instruct:free",
+        model: "qwen/qwen2.5-vl-72b-instruct:free",
         messages: [
           {
             role: "system",
@@ -184,7 +184,7 @@ export class OpenAIService {
   ): Promise<any> {
     try {
       const response = await openai.chat.completions.create({
-        model: "qwen/qwen2.5-vl-32b-instruct:free",
+        model: "qwen/qwen2.5-vl-72b-instruct:free",
         messages: [
           {
             role: "system",
@@ -258,7 +258,7 @@ export class OpenAIService {
   ): Promise<any> {
     try {
       const response = await openai.chat.completions.create({
-        model: "qwen/qwen2.5-vl-32b-instruct:free",
+        model: "qwen/qwen2.5-vl-72b-instruct:free",
         messages: [
           {
             role: "system",
