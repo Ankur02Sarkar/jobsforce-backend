@@ -258,15 +258,23 @@ export class OpenAIService {
   ): Promise<any> {
     try {
       const response = await openai.chat.completions.create({
-        model: "deepseek/deepseek-chat-v3-0324:free",
+        model: "qwen/qwen2.5-vl-72b-instruct:free",
         messages: [
           {
             role: "system",
             content: `You are an expert test case generator for competitive programming problems.
-              Return a structured JSON response with the following fields:
+              You MUST respond with a valid JSON object containing the following fields:
               - testCases: array of objects with {input, expectedOutput, purpose, difficulty, performanceTest} fields
                 where difficulty is one of ["easy", "medium", "hard", "edge"]
-              - explanationText: string with a detailed explanation of the test cases generated`,
+              - explanationText: string with a detailed explanation of the test cases generated
+              
+              IMPORTANT: For arrays, use only literal values (not code expressions). For example:
+              - CORRECT: "nums": [1, 2, 3, 4, 5]
+              - INCORRECT: "nums": [i for i in range(10000)]
+              
+              For large arrays, either list a few elements or set a reasonable number of elements (less than 100).
+              
+              DO NOT include any text before or after the JSON object. Return ONLY valid JSON.`,
           },
           {
             role: "user",
@@ -279,6 +287,8 @@ export class OpenAIService {
               ${JSON.stringify(constraints, null, 2)}
               
               ${solutionHint ? `Solution approach hint: ${solutionHint}` : ""}
+              
+              Remember to respond with ONLY valid JSON.
             `,
           },
         ],
@@ -289,9 +299,30 @@ export class OpenAIService {
       console.log("generateTestCases response : ", response)
 
       // Parse the response content as JSON
-      const testCaseData = JSON.parse(
-        response.choices[0]?.message?.content || "{}",
-      );
+      let testCaseData;
+      try {
+        const content = response.choices[0]?.message?.content || "{}";
+        
+        // Try to remove any potential Python expressions or other invalid JSON
+        // This regex finds Python-like list comprehensions and replaces them with empty arrays
+        const cleanedContent = content
+          .replace(/\[[^\]]*for[^\]]*\]/g, '[]')
+          .replace(/range\(\d+\)/g, '[]');
+        
+        testCaseData = JSON.parse(cleanedContent);
+        
+        // Validate that testCases is an array
+        if (testCaseData.testCases && !Array.isArray(testCaseData.testCases)) {
+          testCaseData.testCases = [];
+        }
+      } catch (jsonError) {
+        console.error("Error parsing JSON response:", jsonError);
+        console.log("Raw response content:", response.choices[0]?.message?.content);
+        testCaseData = {
+          testCases: [],
+          explanationText: "Failed to parse response as JSON"
+        };
+      }
 
       // Return both the structured data and the full explanation text
       return {
