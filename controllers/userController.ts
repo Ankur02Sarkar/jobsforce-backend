@@ -416,10 +416,12 @@ export const getUserByClerkId = asyncHandler(
 
       try {
         // Generate JWT token
+        console.log(`Generating JWT token for user ${user._id} with clerkId ${clerkId}`);
         const token = jwt.sign({ id: user._id }, jwtSecret, {
-          expiresIn: "7d",
+          expiresIn: "30d", // Increase to 30 days
         });
 
+        console.log("JWT token successfully generated, returning to client");
         return res.json({
           success: true,
           data: {

@@ -60,9 +60,6 @@ Required environment variables:
 - `CLERK_WEBHOOK_SECRET`: Clerk Webhhok Secret
 - `OPENAI_API_KEY`: OpenAI API key for AI features
 - `FRONTEND_URL`: Your site URL for OpenAI referrer tracking
-- `SPHERE_ENGINE_TOKEN`: Sphere Engine token for code compilation
-- `SPHERE_ENGINE_SUBMIT_URL`: Sphere Engine submission URL
-- `SPHERE_ENGINE_STATUS_URL`: Sphere Engine status check URL
 
 ### Installation
 

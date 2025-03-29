@@ -334,6 +334,9 @@ export const optimizeSolution = asyncHandler(
         optimizationFocus as "time" | "space",
       );
 
+      console.log("optimizationResult : ", optimizationResult);
+      
+
       // No need to parse manually - the service now returns structured data directly
       const { optimizationSuggestions, analysisText, error } =
         optimizationResult;

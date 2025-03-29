@@ -15,7 +15,7 @@ import {
  */
 const generateToken = (id: string): string => {
   return jwt.sign({ id }, process.env.JWT_SECRET as string, {
-    expiresIn: "7d",
+    expiresIn: "30d",
   });
 };
 
