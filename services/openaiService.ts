@@ -61,7 +61,7 @@ export class OpenAIService {
         response_format: { type: "json_object" },
       });
 
-      console.log("analyzeCode response : ", response)
+      console.log("analyzeCode response : ", response.choices[0]?.message?.content)
 
       // Parse the response content as JSON
       const analysisData = JSON.parse(
@@ -132,7 +132,7 @@ export class OpenAIService {
         response_format: { type: "json_object" },
       });
 
-      console.log("analyzeComplexity response : ", response)
+      console.log("analyzeComplexity response : ", response.choices[0]?.message?.content)
 
       // Parse the response content as JSON
       const complexityData = JSON.parse(
@@ -210,7 +210,7 @@ export class OpenAIService {
         response_format: { type: "json_object" },
       });
 
-      console.log("optimizeCode response : ", response)
+      console.log("optimizeCode response : ", response.choices[0]?.message?.content)
 
       // Parse the response content as JSON
       const optimizationData = JSON.parse(
@@ -296,7 +296,7 @@ export class OpenAIService {
         response_format: { type: "json_object" },
       });
 
-      console.log("generateTestCases response : ", response)
+      console.log("generateTestCases response : ", response.choices[0]?.message?.content)
 
       // Parse the response content as JSON
       let testCaseData;
