@@ -199,7 +199,7 @@ export class OpenAIService {
             role: "system",
             content: `You are an expert algorithm optimizer. Focus on algorithmic improvements rather than code style.
               Return a structured JSON response with the following fields:
-              - optimizedCode: string with the optimized version of the code
+              - optimizedCode: string with the optimized version of the code. Make sure the code is well-formatted with consistent indentation (2 spaces) and proper line breaks. Do not include any extra comments or explanation in the code itself.
               - improvements: array of objects with {description, complexityBefore, complexityAfter, algorithmicChange} fields
               - explanationText: string with a detailed explanation of the optimizations made`,
           },
@@ -212,6 +212,8 @@ export class OpenAIService {
               
               The code is solving this problem:
               ${problemStatement}
+              
+              IMPORTANT: Ensure the optimized code is well-formatted with proper indentation (2 spaces) and line breaks.
             `,
           },
         ],
